@@ -10,7 +10,7 @@ function PopularItems() {
           <div className="col-md-4 mb-4">
             <div className="card shadow h-100 rounded">
               <img
-                src="/src/assets/images/gallery/friedrice.webp"
+                src="/src/assets/images/gallery/Fried.webp"
                 className="card-img-top rounded-top"
                 alt="Fried Rice"
                 style={{ height: "250px", objectFit: "cover" }}
@@ -31,7 +31,7 @@ function PopularItems() {
           <div className="col-md-4 mb-4">
             <div className="card shadow h-100 rounded">
               <img
-                src="/src/assets/images/gallery/coconutrice.webp"
+                src="/src/assets/images/gallery/coconut.webp"
                 className="card-img-top rounded-top"
                 alt="Coconut Rice"
                 style={{ height: "250px", objectFit: "cover" }}

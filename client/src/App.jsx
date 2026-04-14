@@ -10,6 +10,7 @@ import BestDeals from "./components/BestDeals";
 import FriedChickenDeals from "./components/FriedChickenDeals";
 import PizzaDeals from "./components/PizzaDeals";
 import OrderCTA from "./components/OrderCTA";
+import Testimonials from "./components/Testimonials";   // ✅ Added
 import Footer from "./components/Footer";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
       <FriedChickenDeals />
       <PizzaDeals />
       <OrderCTA />
+      <Testimonials />   {/* ✅ Inserted before Footer */}
       <Footer />
     </div>
   );
