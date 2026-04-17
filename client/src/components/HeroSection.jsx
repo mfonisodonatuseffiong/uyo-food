@@ -6,11 +6,11 @@ function HeroSection() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setAnimate(false); // fade out + slide + zoom out
+      setAnimate(false);
       setTimeout(() => {
-        setAnimate(true); // fade in + reset
-      }, 500); // animation duration
-    }, 3000); // every 3 seconds
+        setAnimate(true);
+      }, 500);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -35,15 +35,15 @@ function HeroSection() {
             />
           </div>
 
-          {/* Hero Text + Tabs */}
-          <div className="col-md-7 col-lg-6 py-5 text-md-start text-center">
-            <h1 className="display-4 fw-bold text-danger">Hungry in Uyo?</h1>
+          {/* Hero Text + Tabs with margin on desktop */}
+          <div className="col-md-7 col-lg-6 py-5 text-md-start text-center ps-md-4">
+            <h1 className="display-4 fw-bold text-danger mb-3">Hungry in Uyo?</h1>
             <p className="lead mb-4">
               Within a few clicks, find meals that are accessible near you.
             </p>
 
             {/* Delivery / Pickup Tabs */}
-            <div className="card w-75 mx-auto mx-md-0 shadow">
+            <div className="card shadow mx-auto mx-md-0" style={{ maxWidth: "420px" }}>
               <div className="card-body">
                 <ul className="nav nav-tabs" id="nav-tab" role="tablist">
                   <li className="nav-item">

@@ -1,17 +1,18 @@
-import Navbar from "./components/Navbar";
-import HeroSection from "./components/HeroSection";
-import DiscountItems from "./components/DiscountItems";
-import HowItWorks from "./components/HowItWorks";
-import PopularItems from "./components/PopularItems";
-import FeaturedRestaurants from "./components/FeaturedRestaurants";
-import SearchByFood from "./components/SearchByFood";
-import InstallAppCTA from "./components/InstallAppCTA";
-import BestDeals from "./components/BestDeals";
-import FriedChickenDeals from "./components/FriedChickenDeals";
-import PizzaDeals from "./components/PizzaDeals";
-import OrderCTA from "./components/OrderCTA";
-import Testimonials from "./components/Testimonials";   // ✅ Added
-import Footer from "./components/Footer";
+import './App.css'
+import Navbar from './components/Navbar'
+import HeroSection from './components/HeroSection'
+import DiscountItems from './components/DiscountItems'
+import HowItWorks from './components/HowItWorks'
+import PopularItems from './components/PopularItems'
+import FeaturedRestaurants from './components/FeaturedRestaurants'
+import SearchByFood from './components/SearchByFood'
+import InstallAppCTA from './components/InstallAppCTA'
+import BestDeals from './components/BestDeals'
+import FriedChickenDeals from './components/FriedChickenDeals'
+import PizzaDeals from './components/PizzaDeals'
+import OrderCTA from './components/OrderCTA'
+import Testimonials from './components/Testimonials'
+import Footer from './components/Footer'
 
 function App() {
   return (
@@ -28,10 +29,10 @@ function App() {
       <FriedChickenDeals />
       <PizzaDeals />
       <OrderCTA />
-      <Testimonials />   {/* ✅ Inserted before Footer */}
+      <Testimonials />
       <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
