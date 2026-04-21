@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Afang Soup",
+    "image": "/assets/images/gallery/afang.webp"
+  },
+  {
+    "id": 2,
+    "name": "Ekpang Nkukwo",
+    "image": "/assets/images/gallery/ekpang.webp"
+  },
+  {
+    "id": 3,
+    "name": "Edikangikong Soup",
+    "image": "/assets/images/gallery/edikangikong.webp"
+  }
+]

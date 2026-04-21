@@ -111,3 +111,136 @@ footer a:hover {
 /* Utility spacing */
 .mt-4 { margin-top: 1.5rem !important; }
 .mb-4 { margin-bottom: 1.5rem !important; }
+
+/* ============================= */
+/* Fluorescent Glass Border Effect */
+/* ============================= */
+
+.glass-btn {
+  background: transparent;                  /* transparent glass look */
+  backdrop-filter: blur(10px);              /* frosted blur */
+  border: 2px solid currentColor;           /* border matches Bootstrap color */
+  color: inherit;                           /* keep text color */
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-weight: bold;
+  position: relative;
+  transition: all 0.4s ease;
+  overflow: hidden;
+}
+
+/* Neon border glow effect */
+.glass-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid currentColor;
+  box-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+  opacity: 0.3; /* faint glow always visible */
+  transition: opacity 0.4s ease, box-shadow 0.4s ease;
+  z-index: -1;
+}
+
+/* Stronger fluorescent glow on hover */
+.glass-btn:hover::before {
+  opacity: 0.9;
+  box-shadow: 0 0 12px currentColor, 0 0 24px currentColor, 0 0 48px currentColor;
+}
+
+.glass-btn:hover {
+  transform: scale(1.08);
+}
+
+/* Fluorescent underline effect for navbar links */
+.nav-underline {
+  position: relative;
+  display: inline-block;
+  transition: color 0.3s ease;
+}
+
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 3px;
+  background: currentColor; /* underline matches link color */
+  box-shadow: 0 0 8px currentColor, 0 0 16px currentColor; /* fluorescent glow */
+  transition: width 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-underline:hover::after {
+  width: 100%;
+  box-shadow: 0 0 12px currentColor, 0 0 24px currentColor, 0 0 36px currentColor;
+}
+
+/* Swiper navigation arrows */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #dc3545; /* Uyo-Food red */
+  font-weight: bold;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #ffc107; /* Uyo-Food yellow */
+}
+
+/* Swiper pagination dots */
+.swiper-pagination-bullet {
+  background: #dc3545; /* red */
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  background: #ffc107; /* yellow */
+  opacity: 1;
+}
+
+/* Transparent hamburger button */
+.custom-toggler {
+  border: none;
+  background-color: transparent !important;
+  outline: none;
+}
+
+/* Make the icon visible on warning background */
+.custom-toggler .navbar-toggler-icon {
+  filter: invert(1); /* turns it dark on light bg */
+}
+
+/* Transparent hamburger/X button */
+.custom-toggler {
+  border: none;
+  background-color: transparent !important;
+  outline: none;
+}
+
+/* Ensure hamburger icon visible on bg-warning */
+.custom-toggler .navbar-toggler-icon {
+  filter: invert(1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.favourite-badge {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.favourite-badge:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+}
+.favourite-badge:active {
+  transform: scale(0.95);
+}

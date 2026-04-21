@@ -1,164 +1,129 @@
 import { motion } from "framer-motion";
 
 export default function Footer() {
-  const topCities = [
-    ["San Francisco", "Miami", "San Diego", "East Bay", "Long Beach"],
-    ["Los Angeles", "Washington DC", "Seattle", "Portland", "Nashville"],
-    ["New York City", "Orange County", "Atlanta", "Charlotte", "Denver"],
-    ["Chicago", "Phoenix", "Las Vegas", "Sacramento", "Oklahoma City"],
-    ["Columbus", "New Mexico", "Albuquerque", "Sacramento", "New Orleans"],
+  const companyLinks = [
+    { label: "About Uyo‑Food", href: "/about" },
+    { label: "Our Team", href: "/team" },
+    { label: "Careers", href: "/careers" },
+    { label: "Blog", href: "/blog" },
   ];
 
-  const companyLinks = ["About Us", "Team", "Careers", "Blog"];
-  const contactLinks = ["Help & Support", "Partner with us", "Ride with us"];
-  const legalLinks = ["Terms & Conditions", "Refund & Cancellation", "Privacy Policy", "Cookie Policy"];
+  const contactLinks = [
+    { label: "Help & Support", href: "/support" },
+    { label: "Partner with Us", href: "/partner" },
+    { label: "Deliver with Uyo‑Food", href: "/deliver" },
+    { label: "Contact Us", href: "/contact" },
+  ];
+
+  const legalLinks = [
+    { label: "Terms & Conditions", href: "/terms" },
+    { label: "Refund & Cancellation", href: "/refund" },
+    { label: "Privacy Policy", href: "/privacy" },
+    { label: "Cookie Policy", href: "/cookies" },
+  ];
+
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay },
+    viewport: { once: true },
+  });
 
   return (
-    <section className="py-0 pt-7 bg-1000">
+    <footer className="bg-danger text-white pt-5">
       <div className="container">
-        {/* Top Cities */}
-        <div className="row justify-content-lg-between">
-          <h5 className="lh-lg fw-bold text-white">OUR TOP CITIES</h5>
-          {topCities.map((group, idx) => (
-            <motion.div
-              key={idx}
-              className="col-6 col-md-4 col-lg-auto mb-3"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: idx * 0.2 }}
-              viewport={{ once: true }}
-              data-aos="fade-up"
-            >
-              <ul className="list-unstyled mb-md-4 mb-lg-0">
-                {group.map((city, i) => (
-                  <li key={i} className="lh-lg">
-                    <a className="text-200 text-decoration-none" href="#!">
-                      {city}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-
-        <hr className="text-900" />
-
-        {/* Company, Contact, Legal */}
         <div className="row">
-          <motion.div
-            className="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            data-aos="fade-up"
-          >
-            <h5 className="lh-lg fw-bold text-white">COMPANY</h5>
-            <ul className="list-unstyled mb-md-4 mb-lg-0">
-              {companyLinks.map((link, i) => (
-                <li key={i} className="lh-lg">
-                  <a className="text-200 text-decoration-none" href="#!">
-                    {link}
+          {/* Company */}
+          <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0)}>
+            <h5 className="fw-bold">Company</h5>
+            <ul className="list-unstyled">
+              {companyLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <a className="text-decoration-none text-warning" href={href}>
+                    {label}
                   </a>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          <motion.div
-            className="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            data-aos="fade-up"
-          >
-            <h5 className="lh-lg fw-bold text-white">CONTACT</h5>
-            <ul className="list-unstyled mb-md-4 mb-lg-0">
-              {contactLinks.map((link, i) => (
-                <li key={i} className="lh-lg">
-                  <a className="text-200 text-decoration-none" href="#!">
-                    {link}
+          {/* Contact */}
+          <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0.2)}>
+            <h5 className="fw-bold">Contact</h5>
+            <ul className="list-unstyled">
+              {contactLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <a className="text-decoration-none text-warning" href={href}>
+                    {label}
                   </a>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          <motion.div
-            className="col-6 col-md-4 col-lg-3 col-xxl-2 mb-3"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            data-aos="fade-up"
-          >
-            <h5 className="lh-lg fw-bold text-white">LEGAL</h5>
-            <ul className="list-unstyled mb-md-4 mb-lg-0">
-              {legalLinks.map((link, i) => (
-                <li key={i} className="lh-lg">
-                  <a className="text-200 text-decoration-none" href="#!">
-                    {link}
+          {/* Legal */}
+          <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0.4)}>
+            <h5 className="fw-bold">Legal</h5>
+            <ul className="list-unstyled">
+              {legalLinks.map(({ label, href }) => (
+                <li key={label}>
+                  <a className="text-decoration-none text-warning" href={href}>
+                    {label}
                   </a>
                 </li>
               ))}
             </ul>
           </motion.div>
 
-          {/* Newsletter */}
+          {/* Social + Tagline */}
           <motion.div
-            className="col-12 col-md-8 col-lg-6 col-xxl-4"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            viewport={{ once: true }}
-            data-aos="fade-up"
+            className="col-12 col-md-3 mt-4 mt-md-0 text-center text-md-start"
+            {...fadeUp(0.6)}
           >
-            <h5 className="lh-lg fw-bold text-500">FOLLOW US</h5>
-            <div className="text-start my-3">
-              {/* Social icons */}
-              <a href="#!"><i className="fab fa-instagram fs-2 me-2 text-500"></i></a>
-              <a href="#!"><i className="fab fa-facebook fs-2 mx-2 text-500"></i></a>
-              <a href="#!"><i className="fab fa-twitter fs-2 mx-2 text-500"></i></a>
+            <h5 className="fw-bold mb-3">Stay Connected</h5>
+            <div className="my-3">
+              <a href="https://instagram.com/uyofood" aria-label="Instagram">
+                <i className="fab fa-instagram fs-3 me-3 text-white"></i>
+              </a>
+              <a href="https://facebook.com/uyofood" aria-label="Facebook">
+                <i className="fab fa-facebook fs-3 me-3 text-white"></i>
+              </a>
+              <a href="https://twitter.com/uyofood" aria-label="Twitter">
+                <i className="fab fa-twitter fs-3 text-white"></i>
+              </a>
             </div>
-            <h3 className="text-500 my-4">Receive exclusive offers and <br />discounts in your mailbox</h3>
-            <div className="row input-group-icon mb-5">
-              <div className="col-auto">
-                <i className="fas fa-envelope input-box-icon text-500 ms-3"></i>
-                <input
-                  className="form-control input-box bg-800 border-0"
-                  type="email"
-                  placeholder="Enter Email"
-                  aria-label="email"
-                />
-              </div>
-              <div className="col-auto">
-                <button className="btn btn-primary" type="submit">Subscribe</button>
-              </div>
-            </div>
+            <h4 className="fw-bold">
+              <span className="text-white">Fresh Meals</span>{" "}
+              <span className="text-warning">Hot Deals</span>{" "}
+              <span className="text-white">Delivered Fast</span>
+            </h4>
           </motion.div>
         </div>
 
-        <hr className="border border-800" />
+        <hr className="border-light mt-4" />
 
         {/* Footer bottom */}
-        <div className="row flex-center pb-3">
-          <div className="col-md-6 order-0">
-            <p className="text-200 text-center text-md-start">
-              All rights Reserved &copy; Uyo Food, 2026
+        <div className="row align-items-center">
+          <div className="col-md-6 text-center text-md-start">
+            <p className="mb-0">
+              © {new Date().getFullYear()} Uyo‑Food. All rights reserved.
             </p>
           </div>
-          <div className="col-md-6 order-1">
-            <p className="text-200 text-center text-md-end">
-              Made with <i className="bi bi-suit-heart-fill text-warning"></i> by{" "}
-              <a className="text-200 fw-bold" href="DonaTech" target="_blank" rel="noreferrer">
+          <div className="col-md-6 text-center text-md-end">
+            <p className="mb-0">
+              Powered By: <i className="bi bi-suit-heart-fill text-warning"></i>{" "}
+              <a
+                className="fw-bold text-white"
+                href="https://donatech.dev"
+                target="_blank"
+                rel="noreferrer"
+              >
                 DonaTech
               </a>
             </p>
           </div>
         </div>
       </div>
-    </section>
+    </footer>
   );
 }
