@@ -41,10 +41,10 @@ import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
 import TrackingPage from './pages/TrackingPage'
 import RestaurantDetail from "./pages/RestaurantDetail";
-import ConfirmationPage from "./pages/ConfirmationPage"; // ✅ New import
+import ConfirmationPage from "./pages/ConfirmationPage"; 
 
 // ✅ Notification component
-import Notification from "./components/Notification"; // ✅ New import
+import Notification from "./components/Notification"; 
 
 // Data
 import restaurants from './data/restaurants'
@@ -123,61 +123,63 @@ function HomePage() {
   )
 }
 
-// ✅ App with routes + notification
-function App() {
+// ✅ Inner App that consumes CartContext
+function AppContent() {
   const { notification, notificationType } = useCart();
 
   return (
-    <CartProvider>
-      <div className="App">
-        {/* Global popup notification */}
-        <Notification message={notification} type={notificationType} />
+    <div className="App">
+      {/* Global popup notification */}
+      <Notification message={notification} type={notificationType} />
 
-        <Routes>
-          {/* Homepage route */}
-          <Route path="/" element={<HomePage />} />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/restaurants" element={<Restaurants />} />
+        <Route path="/restaurant/:id" element={<RestaurantDetail />} />
 
-          {/* Restaurants results route */}
-          <Route path="/restaurants" element={<Restaurants />} />
-          <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+        {/* 🛒 Order flow routes */}
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/tracking" element={<TrackingPage />} />
+        <Route path="/confirmation" element={<ConfirmationPage />} />
 
-          {/* 🛒 Order flow routes */}
-          <Route path="/cart" element={<CartPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/tracking" element={<TrackingPage />} />
-          <Route path="/confirmation" element={<ConfirmationPage />} />
+        {/* Other pages */}
+        <Route path="/featured-restaurants" element={<FeaturedRestaurants />} />
+        <Route path="/search-by-food" element={<SearchByFood />} />
+        <Route path="/download" element={<DownloadPage />} />
+        <Route path="/deals" element={<DealsPage />} />
+        <Route path="/local-dishes" element={<LocalDishes />} />
+        <Route path="/testimonials" element={<TestimonialsPage />} />
+        <Route path="/faq" element={<FAQPage />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/careers" element={<Careers />} />
+        <Route path="/help-support" element={<HelpSupport />} />
+        <Route path="/support" element={<HelpSupport />} />
+        <Route path="/partner" element={<PartnerWithUs />} />
+        <Route path="/deliver" element={<DeliverWithUyoFood />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/terms" element={<Terms />} />
+        <Route path="/refund" element={<Refund />} />
+        <Route path="/privacy" element={<Privacy />} />
+        <Route path="/cookies" element={<Cookies />} />
 
-          {/* Featured Restaurants & Search by Food routes */}
-          <Route path="/featured-restaurants" element={<FeaturedRestaurants />} />
-          <Route path="/search-by-food" element={<SearchByFood />} />
-
-          {/* Other pages */}
-          <Route path="/download" element={<DownloadPage />} />
-          <Route path="/deals" element={<DealsPage />} />
-          <Route path="/local-dishes" element={<LocalDishes />} />
-          <Route path="/testimonials" element={<TestimonialsPage />} />
-          <Route path="/faq" element={<FAQPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/careers" element={<Careers />} />
-          <Route path="/help-support" element={<HelpSupport />} />
-          <Route path="/support" element={<HelpSupport />} />
-          <Route path="/partner" element={<PartnerWithUs />} />
-          <Route path="/deliver" element={<DeliverWithUyoFood />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/refund" element={<Refund />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/cookies" element={<Cookies />} />
-
-          {/* ✅ Catch-all 404 route */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </CartProvider>
-  )
+        {/* ✅ Catch-all 404 route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+// ✅ Wrap AppContent with CartProvider
+function App() {
+  return (
+    <CartProvider>
+      <AppContent />
+    </CartProvider>
+  );
+}
+
+export default App;
