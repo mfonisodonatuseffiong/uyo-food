@@ -9,7 +9,7 @@ function DiscoverUyo() {
         loop
         muted
         playsInline
-        poster="/images/uyo-town-fallback.jpg" // ✅ fallback image
+        poster="/images/uyo.jpg" // ✅ fallback image
         style={{ objectFit: "cover", filter: "brightness(0.5)" }}
       >
         {/* Primary MP4 source */}
@@ -18,7 +18,7 @@ function DiscoverUyo() {
         <source src="/videos/uyo-town.webm" type="video/webm" />
         {/* Fallback image if video fails */}
         <img
-          src="/images/uyo-town-fallback.jpg"
+          src="/images/uyo.jpg"
           alt="Discover Uyo"
           className="w-100 h-100"
           style={{ objectFit: "cover", filter: "brightness(0.5)" }}

@@ -1,5 +1,6 @@
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
+import { CartProvider, useCart } from './context/CartContext'
 
 // Core layout components
 import Navbar from './components/Navbar'
@@ -24,12 +25,26 @@ import FAQPage from './pages/FAQPage'
 import GalleryPage from './pages/GalleryPage'
 import Blog from './pages/Blog'
 import About from './pages/About'
-import Team from './pages/Team'          // ✅ Added Team page
-import Restaurants from './pages/Restaurants'
+import Team from './pages/Team'
+import Careers from './pages/Careers'
+import HelpSupport from './pages/HelpSupport'
+import PartnerWithUs from './pages/PartnerWithUs'
+import DeliverWithUyoFood from './pages/DeliverWithUyoFood'
+import Restaurants from "./pages/Restaurants";
 import Terms from './pages/Terms'
 import Refund from './pages/Refund'
 import Privacy from './pages/Privacy'
 import Cookies from './pages/Cookies'
+
+// 🛒 New pages for order flow
+import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
+import TrackingPage from './pages/TrackingPage'
+import RestaurantDetail from "./pages/RestaurantDetail";
+import ConfirmationPage from "./pages/ConfirmationPage"; // ✅ New import
+
+// ✅ Notification component
+import Notification from "./components/Notification"; // ✅ New import
 
 // Data
 import restaurants from './data/restaurants'
@@ -41,6 +56,19 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/effect-fade'
 import { Navigation, Pagination, Autoplay, EffectFade } from 'swiper/modules'
+
+// ✅ Simple 404 Page
+function NotFound() {
+  return (
+    <div className="text-center py-5">
+      <h1 className="fw-bold text-danger">404</h1>
+      <p className="lead">Page Not Found</p>
+      <a href="/" className="btn btn-warning rounded-pill px-4 fw-bold">
+        Back to Home
+      </a>
+    </div>
+  )
+}
 
 // ✅ Homepage component
 function HomePage() {
@@ -95,34 +123,60 @@ function HomePage() {
   )
 }
 
-// ✅ App with routes
+// ✅ App with routes + notification
 function App() {
+  const { notification, notificationType } = useCart();
+
   return (
-    <div className="App">
-      <Routes>
-        {/* Homepage route */}
-        <Route path="/" element={<HomePage />} />
+    <CartProvider>
+      <div className="App">
+        {/* Global popup notification */}
+        <Notification message={notification} type={notificationType} />
 
-        {/* Restaurants results route */}
-        <Route path="/restaurants" element={<Restaurants />} />
+        <Routes>
+          {/* Homepage route */}
+          <Route path="/" element={<HomePage />} />
 
-        {/* Other pages */}
-        <Route path="/download" element={<DownloadPage />} />
-        <Route path="/deals" element={<DealsPage />} />
-        <Route path="/local-dishes" element={<LocalDishes />} />
-        <Route path="/testimonials" element={<TestimonialsPage />} />
-        <Route path="/faq" element={<FAQPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/refund" element={<Refund />} />
-        <Route path="/privacy" element={<Privacy />} />
-        <Route path="/cookies" element={<Cookies />} />
-      </Routes>
-    </div>
+          {/* Restaurants results route */}
+          <Route path="/restaurants" element={<Restaurants />} />
+          <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+
+          {/* 🛒 Order flow routes */}
+          <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/tracking" element={<TrackingPage />} />
+          <Route path="/confirmation" element={<ConfirmationPage />} />
+
+          {/* Featured Restaurants & Search by Food routes */}
+          <Route path="/featured-restaurants" element={<FeaturedRestaurants />} />
+          <Route path="/search-by-food" element={<SearchByFood />} />
+
+          {/* Other pages */}
+          <Route path="/download" element={<DownloadPage />} />
+          <Route path="/deals" element={<DealsPage />} />
+          <Route path="/local-dishes" element={<LocalDishes />} />
+          <Route path="/testimonials" element={<TestimonialsPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/gallery" element={<GalleryPage />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/careers" element={<Careers />} />
+          <Route path="/help-support" element={<HelpSupport />} />
+          <Route path="/support" element={<HelpSupport />} />
+          <Route path="/partner" element={<PartnerWithUs />} />
+          <Route path="/deliver" element={<DeliverWithUyoFood />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/refund" element={<Refund />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/cookies" element={<Cookies />} />
+
+          {/* ✅ Catch-all 404 route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </CartProvider>
   )
 }
 

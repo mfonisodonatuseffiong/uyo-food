@@ -25,7 +25,7 @@ export default function Team() {
       name: "Gideon Bigbitz",
       role: "Lead Chef Partner",
       bio: "Works with restaurants to maintain authentic taste and quality.",
-      image: "/src/assets/images/team/pro.webp",
+      image: "/src/assets/images/team/bigbitz.webp",
     },
   ];
 

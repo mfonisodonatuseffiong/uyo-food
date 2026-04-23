@@ -7,11 +7,18 @@ export default function OrderCTA() {
   const [slides, setSlides] = useState([]);
 
   useEffect(() => {
-    // Fetch featured dishes from backend
-    fetch("/api/featured-dishes")
-      .then((res) => res.json())
-      .then((data) => setSlides(data))
-      .catch((err) => console.error("Error loading featured dishes:", err));
+    // ❌ Commented out backend fetch for now
+    // fetch("/api/featured-dishes")
+    //   .then((res) => res.json())
+    //   .then((data) => setSlides(data))
+    //   .catch((err) => console.error("Error loading featured dishes:", err));
+
+    // ✅ Temporary mock data so frontend works perfectly
+    setSlides([
+      { id: 1, name: "Afang Soup", image: "/images/afang.jpg" },
+      { id: 2, name: "Jollof Rice", image: "/images/jollof.jpg" },
+      { id: 3, name: "Ekwang", image: "/images/ekwang.jpg" }
+    ]);
   }, []);
 
   return (

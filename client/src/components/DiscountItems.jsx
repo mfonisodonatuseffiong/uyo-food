@@ -1,23 +1,42 @@
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 function DiscountItems() {
   const navigate = useNavigate();
+
+  // Fade-up animation
+  const fadeUp = (delay = 0) => ({
+    initial: { opacity: 0, y: 30 },
+    whileInView: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay },
+    viewport: { once: true },
+  });
 
   return (
     <section className="py-5 bg-light" id="discounts">
       <div className="container">
         {/* Section Title */}
-        <h2 className="text-center fw-bold text-danger mb-4">
+        <motion.h2
+          className="text-center fw-bold text-danger mb-4"
+          {...fadeUp(0)}
+        >
           <i className="fas fa-tags me-2 text-warning"></i> Uyo-Food Specials
-        </h2>
-        <p className="text-center text-muted mb-5">
+        </motion.h2>
+        <motion.p
+          className="text-center text-muted mb-5"
+          {...fadeUp(0.2)}
+        >
           Enjoy authentic local favourites at unbeatable prices — fresh, hot, and discounted just for you.
-        </p>
+        </motion.p>
 
         <div className="row">
           {/* Vegetable Soup */}
-          <div className="col-md-4 mb-4">
-            <div className="card shadow h-100 rounded">
+          <motion.div className="col-md-4 mb-4" {...fadeUp(0.3)}>
+            <motion.div
+              className="card shadow h-100 rounded"
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.2)" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <img
                 src="/src/assets/images/gallery/vegetable.webp"
                 className="card-img-top rounded-top"
@@ -37,12 +56,16 @@ function DiscountItems() {
                   <i className="fas fa-shopping-cart me-2"></i> Order Now
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Jollof Rice */}
-          <div className="col-md-4 mb-4">
-            <div className="card shadow h-100 rounded">
+          <motion.div className="col-md-4 mb-4" {...fadeUp(0.4)}>
+            <motion.div
+              className="card shadow h-100 rounded"
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.2)" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <img
                 src="/src/assets/images/gallery/jollof.webp"
                 className="card-img-top rounded-top"
@@ -62,12 +85,16 @@ function DiscountItems() {
                   <i className="fas fa-shopping-cart me-2"></i> Order Now
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* Afang Soup */}
-          <div className="col-md-4 mb-4">
-            <div className="card shadow h-100 rounded">
+          <motion.div className="col-md-4 mb-4" {...fadeUp(0.5)}>
+            <motion.div
+              className="card shadow h-100 rounded"
+              whileHover={{ scale: 1.05, boxShadow: "0 8px 20px rgba(0,0,0,0.2)" }}
+              transition={{ type: "spring", stiffness: 300 }}
+            >
               <img
                 src="/src/assets/images/gallery/afang.webp"
                 className="card-img-top rounded-top"
@@ -87,19 +114,19 @@ function DiscountItems() {
                   <i className="fas fa-shopping-cart me-2"></i> Order Now
                 </button>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* View All Discounts Button */}
-        <div className="text-center mt-4">
+        <motion.div className="text-center mt-4" {...fadeUp(0.6)}>
           <button
             className="btn btn-warning btn-lg rounded-pill shadow fw-bold"
             onClick={() => navigate("/restaurants?type=delivery")}
           >
             <i className="fas fa-arrow-right me-2"></i> View All Discounts
           </button>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

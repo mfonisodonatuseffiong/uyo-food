@@ -7,7 +7,7 @@ const dishes = [
   },
   {
     name: "Afia Efere",
-    image: "/src/assets/images/gallery/whitesoup.webp",
+    image: "/src/assets/images/gallery/Afiaefere.webp",
     description: "White soup delicacy, often served with swallow.",
     delay: 0.2,
   },
@@ -20,7 +20,7 @@ const dishes = [
   {
     name: "Ekpang Nkuwo",
     image: "/src/assets/images/gallery/ekpang.webp",
-    description: "Pounded cocoyam wrapped in leaves, a traditional Efik dish.",
+    description: "Cocoyam wrapped in leaves, a traditional Efik dish.",
     delay: 0.6,
   },
   {

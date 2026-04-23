@@ -9,10 +9,16 @@ function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [animate, setAnimate] = useState(true);
   const [searchValue, setSearchValue] = useState("");
-  const [orderType, setOrderType] = useState("delivery"); // ✅ Delivery/Pickup state
+  const [orderType, setOrderType] = useState("delivery");
   const navigate = useNavigate();
 
+  // ✅ Fade-in state
+  const [fadeIn, setFadeIn] = useState(false);
+
   useEffect(() => {
+    // Trigger fade-in when component mounts
+    setFadeIn(true);
+
     const interval = setInterval(() => {
       setAnimate(false);
       setTimeout(() => {
@@ -50,7 +56,9 @@ function HeroSection() {
   return (
     <section
       id="home"
-      className="position-relative d-flex align-items-center text-dark"
+      className={`position-relative d-flex align-items-center text-dark animate__animated ${
+        fadeIn ? "animate__fadeIn" : ""
+      }`}
       style={{ minHeight: "100vh" }}
     >
       {/* Background Image */}
@@ -77,18 +85,18 @@ function HeroSection() {
               Fast Delivery
             </span>
 
-            {/* Heading */}
-            <h1 className="fw-bold display-4 mb-3 text-white animate__animated animate__fadeInUp animate__delay-1s">
+            {/* Heading with zoom-in + delay */}
+            <h1 className="fw-bold display-4 mb-3 text-white animate__animated animate__fadeInUp animate__zoomIn animate__delay-1s">
               Taste Local Favourites in <span className="text-warning">Uyo</span>
             </h1>
 
-            {/* Subtext */}
-            <p className="lead mb-4 text-light animate__animated animate__fadeInUp animate__delay-1s">
+            {/* Subtext with longer delay */}
+            <p className="lead mb-4 text-light animate__animated animate__fadeInUp animate__delay-2s">
               Discover traditional dishes and enjoy them delivered hot and fresh from your favourite restaurants.
             </p>
 
             {/* Delivery / Pickup Tabs */}
-            <div className="card border-0 shadow-lg rounded-4 p-4 bg-white mb-4 animate__animated animate__fadeInUp animate__delay-2s">
+            <div className="card border-0 shadow-lg rounded-4 p-4 bg-white mb-4 animate__animated animate__fadeInUp animate__delay-3s">
               <ul className="nav nav-pills nav-justified mb-4">
                 <li className="nav-item">
                   <button
@@ -153,13 +161,13 @@ function HeroSection() {
             </div>
 
             {/* Local Favourites */}
-            <div>
+            <div className="animate__animated animate__fadeInUp animate__delay-4s">
               <h6 className="fw-bold text-light mb-2">Local Favourites:</h6>
               <div className="d-flex flex-wrap gap-2">
                 {["Edikan Ikong", "Afia Efere", "Atama Soup", "Ekpang Nkuwo", "Afang"].map((dish, idx) => (
                   <button
                     key={idx}
-                    className="badge bg-danger text-white rounded-pill px-3 py-2 shadow-sm border-0 favourite-badge animate__animated animate__fadeInUp animate__delay-3s"
+                    className="badge bg-danger text-white rounded-pill px-3 py-2 shadow-sm border-0 favourite-badge"
                     onClick={() =>
                       navigate(`/restaurants?dish=${encodeURIComponent(dish)}&type=${orderType}`)
                     }

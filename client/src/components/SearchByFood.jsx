@@ -25,38 +25,45 @@ export default function SearchByFood() {
   };
 
   return (
-    <section className="py-5 bg-light" id="search-food">
+    <section className="py-5 bg-warning" id="search-food">
       <div className="container">
         {/* Section Header */}
         <div className="row flex-center mb-4">
           <div className="col-lg-7">
             <motion.h2
-              className="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start text-danger"
+              className="fw-bold fs-3 fs-lg-5 lh-sm text-center text-lg-start text-dark"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              Search by Local Food
+              <i className="fas fa-search me-2 text-danger"></i> Search by Local Food
             </motion.h2>
-            <p className="text-muted text-center text-lg-start">
+            <p className="text-dark text-center text-lg-start">
               Type or tap a dish to explore restaurants serving your favourite Uyo delicacies.
             </p>
           </div>
           <div className="col-lg-5 text-lg-end text-center">
             {/* Inline Search Bar */}
-            <form className="input-group" onSubmit={handleSearch}>
+            <motion.form
+              className="input-group glass-btn"
+              onSubmit={handleSearch}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               <input
                 type="text"
-                className="form-control border-0 shadow-sm"
+                className="form-control border-0 bg-transparent text-dark fw-semibold"
                 placeholder="Search for a dish..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <button className="btn btn-danger fw-bold" type="submit">
+              <button className="glass-btn btn btn-danger fw-bold" type="submit">
                 <i className="fas fa-search me-2"></i> Search
               </button>
-            </form>
+            </motion.form>
           </div>
         </div>
 
@@ -72,14 +79,14 @@ export default function SearchByFood() {
               viewport={{ once: true }}
             >
               <div
-                className="card card-span h-100 shadow-sm d-flex flex-column align-items-center justify-content-center p-3"
+                className="card card-span h-100 shadow-sm d-flex flex-column align-items-center justify-content-center p-3 glass-btn"
                 style={{ cursor: "pointer" }}
                 onClick={() =>
                   navigate(`/restaurants?dish=${encodeURIComponent(food.name)}&type=delivery`)
                 }
               >
                 <div
-                  className="rounded-circle overflow-hidden"
+                  className="food-thumbnail rounded-circle overflow-hidden"
                   style={{
                     width: "160px",
                     height: "160px",
@@ -96,11 +103,11 @@ export default function SearchByFood() {
                   />
                 </div>
                 <div className="card-body ps-0 text-center">
-                  <h6 className="fw-bold text-warning text-truncate mt-3 mb-2">
+                  <h6 className="fw-bold text-dark text-truncate mt-3 mb-2">
                     {food.name}
                   </h6>
                   <button
-                    className="btn btn-danger btn-sm rounded-pill fw-bold shadow-sm"
+                    className="glass-btn btn btn-danger btn-sm rounded-pill fw-bold"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/restaurants?dish=${encodeURIComponent(food.name)}&type=delivery`);

@@ -9,16 +9,16 @@ export default function Refund() {
   });
 
   return (
-    <section className="py-5 bg-light" id="refund">
+    <section className="py-5 bg-warning" id="refund">   {/* ✅ Changed background */}
       <div className="container">
         <motion.h1
-          className="fw-bold text-danger mb-4 text-center"
+          className="fw-bold text-dark mb-4 text-center"
           {...fadeUp(0)}
         >
-          Refund & Cancellation Policy
+          <i className="fas fa-undo-alt me-2 text-danger"></i> Refund & Cancellation Policy
         </motion.h1>
         <motion.p
-          className="text-secondary text-center mb-5"
+          className="text-dark text-center mb-5"
           {...fadeUp(0.2)}
         >
           At Uyo‑Food, we strive to ensure every meal is delivered fresh and on
@@ -28,7 +28,9 @@ export default function Refund() {
 
         <div className="row">
           <motion.div className="col-md-12 mb-4" {...fadeUp(0.3)}>
-            <h5 className="fw-bold text-danger">1. Order Cancellation</h5>
+            <h5 className="fw-bold text-danger">
+              <i className="fas fa-times-circle me-2"></i> 1. Order Cancellation
+            </h5>
             <p className="text-secondary">
               Orders can be cancelled within 5 minutes of placement. After this
               window, cancellations may not be possible if the restaurant has
@@ -37,7 +39,9 @@ export default function Refund() {
           </motion.div>
 
           <motion.div className="col-md-12 mb-4" {...fadeUp(0.4)}>
-            <h5 className="fw-bold text-danger">2. Refund Eligibility</h5>
+            <h5 className="fw-bold text-danger">
+              <i className="fas fa-check-circle me-2"></i> 2. Refund Eligibility
+            </h5>
             <p className="text-secondary">
               Refunds are issued if your order is undelivered, arrives
               significantly late, or is incorrect. Cold or spoiled food must be
@@ -46,7 +50,9 @@ export default function Refund() {
           </motion.div>
 
           <motion.div className="col-md-12 mb-4" {...fadeUp(0.5)}>
-            <h5 className="fw-bold text-danger">3. Refund Process</h5>
+            <h5 className="fw-bold text-danger">
+              <i className="fas fa-credit-card me-2"></i> 3. Refund Process
+            </h5>
             <p className="text-secondary">
               Refunds are processed within 5–7 business days to your original
               payment method. Cash‑on‑delivery refunds will be handled directly
@@ -55,7 +61,9 @@ export default function Refund() {
           </motion.div>
 
           <motion.div className="col-md-12 mb-4" {...fadeUp(0.6)}>
-            <h5 className="fw-bold text-danger">4. Non‑Refundable Cases</h5>
+            <h5 className="fw-bold text-danger">
+              <i className="fas fa-ban me-2"></i> 4. Non‑Refundable Cases
+            </h5>
             <p className="text-secondary">
               Refunds are not issued for change of mind after delivery, minor
               delays due to traffic, or dissatisfaction with taste preferences.
@@ -64,7 +72,7 @@ export default function Refund() {
         </div>
 
         <motion.div className="text-center mt-5" {...fadeUp(0.7)}>
-          <p className="text-secondary">
+          <p className="text-dark">
             For refund requests, contact us at{" "}
             <a
               href="mailto:refunds@uyofood.com"

@@ -14,7 +14,7 @@ function FeaturedRestaurants() {
       badge: "🔥 Fast Delivery",
     },
     {
-      img: "/src/assets/images/gallery/whitesoup.webp",
+      img: "/src/assets/images/gallery/Afiaefere.webp",
       name: "Kilimanjaro",
       description: "Serving Nigerian classics, pastries, and continental meals.",
       highlight: "Afia Efere Soup",
@@ -30,17 +30,17 @@ function FeaturedRestaurants() {
   ];
 
   return (
-    <section className="py-5 bg-light" id="restaurants">
+    <section className="py-5 bg-warning" id="restaurants">
       <div className="container">
         {/* Section Title */}
         <motion.h2
-          className="text-center fw-bold text-danger mb-4"
+          className="text-center fw-bold text-dark mb-4"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <i className="fas fa-store me-2 text-warning"></i> Featured Restaurants
+          <i className="fas fa-store me-2 text-danger"></i> Featured Restaurants
         </motion.h2>
 
         {/* Restaurant Cards */}
@@ -54,27 +54,40 @@ function FeaturedRestaurants() {
               transition={{ duration: 0.8, delay: idx * 0.2 }}
               viewport={{ once: true }}
             >
-              <div className="card shadow h-100 rounded position-relative">
+              <div
+                className="card shadow h-100 rounded position-relative glass-card"
+                onClick={() =>
+                  navigate(`/restaurants?dish=${encodeURIComponent(r.highlight)}&type=delivery`)
+                }
+                style={{ cursor: "pointer" }}
+              >
                 {/* Badge */}
                 <span className="badge bg-danger position-absolute top-0 start-0 m-2 px-3 py-2 rounded-pill shadow">
                   {r.badge}
                 </span>
 
-                <img
-                  src={r.img}
-                  className="card-img-top rounded-top"
-                  alt={r.name}
-                  style={{ height: "220px", objectFit: "cover" }}
-                />
+                <div
+                  className="food-thumbnail rounded-top overflow-hidden"
+                  style={{ height: "220px" }}
+                >
+                  <img
+                    src={r.img}
+                    className="card-img-top"
+                    alt={r.name}
+                    style={{ height: "100%", objectFit: "cover" }}
+                  />
+                </div>
+
                 <div className="card-body d-flex flex-column text-center">
-                  <h5 className="card-title text-warning fw-bold">{r.name}</h5>
+                  <h5 className="card-title text-dark fw-bold">{r.name}</h5>
                   <p className="card-text text-dark flex-grow-1">{r.description}</p>
                   <p className="fw-bold text-danger">{r.highlight}</p>
                   <button
-                    className="btn btn-danger mt-auto rounded-pill fw-bold shadow-sm"
-                    onClick={() =>
-                      navigate(`/restaurants?dish=${encodeURIComponent(r.highlight)}&type=delivery`)
-                    }
+                    className="glass-btn btn btn-danger mt-auto rounded-pill fw-bold"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/restaurants?dish=${encodeURIComponent(r.highlight)}&type=delivery`);
+                    }}
                   >
                     <i className="fas fa-shopping-cart me-2"></i> Order Now
                   </button>
@@ -93,7 +106,7 @@ function FeaturedRestaurants() {
           viewport={{ once: true }}
         >
           <button
-            className="btn btn-danger btn-lg rounded-pill shadow fw-bold"
+            className="glass-btn btn btn-danger btn-lg rounded-pill fw-bold"
             onClick={() => navigate("/restaurants")}
           >
             <i className="fas fa-arrow-right me-2"></i> View All Restaurants
