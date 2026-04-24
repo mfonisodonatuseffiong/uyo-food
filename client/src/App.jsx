@@ -43,8 +43,8 @@ import TrackingPage from './pages/TrackingPage'
 import RestaurantDetail from "./pages/RestaurantDetail";
 import ConfirmationPage from "./pages/ConfirmationPage"; 
 
-// ✅ Notification component
-import Notification from "./components/Notification"; 
+// ✅ Notification stack component
+import NotificationStack from "./components/Notification"; 
 
 // Data
 import restaurants from './data/restaurants'
@@ -125,12 +125,15 @@ function HomePage() {
 
 // ✅ Inner App that consumes CartContext
 function AppContent() {
-  const { notification, notificationType } = useCart();
+  const { notifications, dismissNotification } = useCart();
 
   return (
     <div className="App">
-      {/* Global popup notification */}
-      <Notification message={notification} type={notificationType} />
+      {/* Global stacked toast notifications */}
+      <NotificationStack
+        notifications={notifications}
+        onDismiss={dismissNotification}
+      />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
@@ -140,8 +143,9 @@ function AppContent() {
         {/* 🛒 Order flow routes */}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/tracking" element={<TrackingPage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
+        <Route path="/tracking" element={<TrackingPage />} />
+       
 
         {/* Other pages */}
         <Route path="/featured-restaurants" element={<FeaturedRestaurants />} />
@@ -173,7 +177,7 @@ function AppContent() {
   );
 }
 
-// ✅ Wrap AppContent with CartProvider
+// ✅ AppContent Wrap with CartProvider
 function App() {
   return (
     <CartProvider>

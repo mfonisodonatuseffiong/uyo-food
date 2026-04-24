@@ -21,7 +21,8 @@ export default function CheckoutPage() {
   const handleConfirmOrder = () => {
     // ✅ In real app, send order to backend here
     clearCart();
-    navigate("/tracking"); // go to tracking page
+    // First go to confirmation page
+    navigate("/confirmation");
   };
 
   return (

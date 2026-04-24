@@ -1,23 +1,43 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
-export default function Notification({ message, type = "error" }) {
-  if (!message) return null;
-
-  // Choose background color based on type
-  const bgColor =
-    type === "success" ? "bg-success" :
-    type === "info" ? "bg-info" :
-    "bg-danger"; // default error
-
+export default function NotificationStack({ notifications, onDismiss }) {
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: [0, 1, 0, 1, 0] }} // blinking effect
-      transition={{ duration: 3 }}
-      className={`position-fixed top-0 start-50 translate-middle-x mt-3 px-4 py-2 ${bgColor} text-white rounded shadow-lg fw-bold`}
-      style={{ zIndex: 9999 }}
+    <div
+      className="position-fixed bottom-0 end-0 mb-4 me-4 d-flex flex-column align-items-end"
+      style={{ zIndex: 9999, gap: "0.5rem" }}
     >
-      {message}
-    </motion.div>
+      <AnimatePresence>
+        {notifications.map((n) => {
+          const bgColor =
+            n.type === "success" ? "bg-success" :
+            n.type === "info" ? "bg-info" :
+            "bg-danger"; // default error
+
+          const icon =
+            n.type === "success" ? "✅" :
+            n.type === "info" ? "ℹ️" :
+            "❌";
+
+          return (
+            <motion.div
+              key={n.id}
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className={`px-4 py-2 ${bgColor} text-white rounded shadow-lg fw-bold d-flex justify-content-between align-items-center`}
+              style={{ minWidth: "280px" }}
+            >
+              <span>{icon} {n.message}</span>
+              <button
+                onClick={() => onDismiss(n.id)}
+                className="btn-close btn-close-white ms-3"
+                aria-label="Close"
+              ></button>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
+    </div>
   );
 }

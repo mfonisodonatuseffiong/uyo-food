@@ -5,6 +5,9 @@ export default function ConfirmationPage() {
   // Simulated order ID (in real app, generate from backend)
   const orderId = Math.floor(Math.random() * 1000000);
 
+  // QR code URL from API
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${orderId}`;
+
   return (
     <section className="py-5 bg-warning" id="confirmation-page">
       <div className="container text-center">
@@ -32,7 +35,7 @@ export default function ConfirmationPage() {
           Your order has been placed successfully.
         </p>
 
-        {/* Order ID */}
+        {/* Order ID + QR Code */}
         <motion.div
           className="card shadow-lg glass-card p-3 mb-4"
           initial={{ opacity: 0, y: 20 }}
@@ -42,6 +45,23 @@ export default function ConfirmationPage() {
           <h5 className="fw-bold text-dark">Order ID</h5>
           <p className="fw-bold text-danger fs-4">#{orderId}</p>
           <p className="text-muted small">Keep this ID for reference.</p>
+
+          {/* ✅ QR Code */}
+          <div className="d-flex justify-content-center mt-3">
+            <img src={qrUrl} alt="Order QR Code" />
+          </div>
+          <p className="text-muted small mt-2">Scan this QR code to verify your order.</p>
+
+          {/* ✅ Download Button */}
+          <div className="mt-3">
+            <a
+              href={qrUrl}
+              download={`order-${orderId}-qr.png`}
+              className="btn btn-outline-dark fw-bold rounded-pill px-4"
+            >
+              Download QR Code <i className="fas fa-download ms-2"></i>
+            </a>
+          </div>
         </motion.div>
 
         {/* Navigation Buttons */}

@@ -17,13 +17,18 @@ const cartReducer = (state, action) => {
 
 export const CartProvider = ({ children }) => {
   const [cart, dispatch] = useReducer(cartReducer, []);
-  const [notification, setNotification] = useState(null);
-  const [notificationType, setNotificationType] = useState("info");
+  const [notifications, setNotifications] = useState([]);
 
+  // ✅ Show notification (stacked + auto-remove)
   const showNotification = (msg, type = "info") => {
-    setNotification(msg);
-    setNotificationType(type);
-    setTimeout(() => setNotification(null), 3000);
+    const id = Date.now(); // unique id
+    const newNote = { id, message: msg, type };
+    setNotifications((prev) => [...prev, newNote]);
+
+    // Auto-remove after 3 seconds
+    setTimeout(() => {
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
+    }, 3000);
   };
 
   const addItem = (item) => {
@@ -48,9 +53,22 @@ export const CartProvider = ({ children }) => {
     showNotification("Cart cleared.", "info");
   };
 
+  // ✅ Manual dismiss
+  const dismissNotification = (id) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
   return (
     <CartContext.Provider
-      value={{ cart, addItem, removeItem, clearCart, notification, notificationType }}
+      value={{
+        cart,
+        addItem,
+        removeItem,
+        clearCart,
+        notifications,
+        showNotification,
+        dismissNotification,
+      }}
     >
       {children}
     </CartContext.Provider>
