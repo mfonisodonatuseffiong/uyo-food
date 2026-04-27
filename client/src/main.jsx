@@ -1,29 +1,31 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
-import 'animate.css';
 
+import { BrowserRouter } from "react-router-dom";
 
-// Global styles
-import "./index.css";       // base styles
-import "./App.css";         // component-specific styles
-import "bootstrap/dist/css/bootstrap.min.css"; // bootstrap framework
-import "bootstrap/dist/js/bootstrap.bundle.min.js"; // bootstrap JS for carousel, modals, etc.
+/* Framework styles */
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
-import { BrowserRouter } from "react-router-dom"; // ✅ Step 2: Router setup
-
-// AOS setup
-import AOS from "aos";
+/* Library styles */
+import "animate.css";
 import "aos/dist/aos.css";
+
+/* Your merged global stylesheet */
+import "./index.css";
+
+import AOS from "aos";
 
 AOS.init({
   duration: 800,
   once: true,
 });
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(
+  document.getElementById("root")
+).render(
   <React.StrictMode>
-    {/* ✅ Wrap App in BrowserRouter so routes work */}
     <BrowserRouter>
       <App />
     </BrowserRouter>

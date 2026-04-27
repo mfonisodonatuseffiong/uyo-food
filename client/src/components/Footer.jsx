@@ -30,16 +30,25 @@ export default function Footer() {
   });
 
   return (
-    <footer className="bg-danger text-white pt-5">
+    <footer className="bg-danger text-white pt-5 premium-footer">
       <div className="container">
         <div className="row">
           {/* Company */}
           <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0)}>
-            <h5 className="fw-bold">Company</h5>
+            <h5
+              className="fw-bold mb-3"
+              style={{
+                background: "linear-gradient(90deg, #ffc107, #fff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Company
+            </h5>
             <ul className="list-unstyled">
               {companyLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <a className="text-decoration-none text-warning" href={href}>
+                  <a className="text-decoration-none premium-link" href={href}>
                     {label}
                   </a>
                 </li>
@@ -49,11 +58,20 @@ export default function Footer() {
 
           {/* Contact */}
           <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0.2)}>
-            <h5 className="fw-bold">Contact</h5>
+            <h5
+              className="fw-bold mb-3"
+              style={{
+                background: "linear-gradient(90deg, #ffc107, #fff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Contact
+            </h5>
             <ul className="list-unstyled">
               {contactLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <a className="text-decoration-none text-warning" href={href}>
+                  <a className="text-decoration-none premium-link" href={href}>
                     {label}
                   </a>
                 </li>
@@ -63,11 +81,20 @@ export default function Footer() {
 
           {/* Legal */}
           <motion.div className="col-6 col-md-3 mb-3" {...fadeUp(0.4)}>
-            <h5 className="fw-bold">Legal</h5>
+            <h5
+              className="fw-bold mb-3"
+              style={{
+                background: "linear-gradient(90deg, #ffc107, #fff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Legal
+            </h5>
             <ul className="list-unstyled">
               {legalLinks.map(({ label, href }) => (
                 <li key={label}>
-                  <a className="text-decoration-none text-warning" href={href}>
+                  <a className="text-decoration-none premium-link" href={href}>
                     {label}
                   </a>
                 </li>
@@ -80,16 +107,25 @@ export default function Footer() {
             className="col-12 col-md-3 mt-4 mt-md-0 text-center text-md-start"
             {...fadeUp(0.6)}
           >
-            <h5 className="fw-bold mb-3">Stay Connected</h5>
+            <h5
+              className="fw-bold mb-3"
+              style={{
+                background: "linear-gradient(90deg, #ffc107, #fff)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              Stay Connected
+            </h5>
             <div className="my-3">
-              <a href="https://instagram.com/uyofood" aria-label="Instagram">
-                <i className="fab fa-instagram fs-3 me-3 text-white"></i>
+              <a href="https://instagram.com/uyofood" aria-label="Instagram" className="premium-social">
+                <i className="fab fa-instagram fs-3 me-3"></i>
               </a>
-              <a href="https://facebook.com/uyofood" aria-label="Facebook">
-                <i className="fab fa-facebook fs-3 me-3 text-white"></i>
+              <a href="https://facebook.com/uyofood" aria-label="Facebook" className="premium-social">
+                <i className="fab fa-facebook fs-3 me-3"></i>
               </a>
-              <a href="https://twitter.com/uyofood" aria-label="Twitter">
-                <i className="fab fa-twitter fs-3 text-white"></i>
+              <a href="https://twitter.com/uyofood" aria-label="Twitter" className="premium-social">
+                <i className="fab fa-twitter fs-3"></i>
               </a>
             </div>
             <h4 className="fw-bold">
@@ -113,7 +149,7 @@ export default function Footer() {
             <p className="mb-0">
               Powered By: <i className="bi bi-suit-heart-fill text-warning"></i>{" "}
               <a
-                className="fw-bold text-white"
+                className="fw-bold text-white premium-link"
                 href="https://donatech.dev"
                 target="_blank"
                 rel="noreferrer"
@@ -124,6 +160,34 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      <style>
+        {`
+          @keyframes pulseUnderline {
+            0% { transform: scaleX(0.8); opacity: 0.6; }
+            50% { transform: scaleX(1); opacity: 1; }
+            100% { transform: scaleX(0.8); opacity: 0.6; }
+          }
+          .premium-link {
+            color: #ffc107;
+            transition: color 0.3s ease;
+          }
+          .premium-link:hover {
+            color: #fff;
+          }
+          .premium-social {
+            color: #fff;
+            transition: transform 0.3s ease, color 0.3s ease;
+          }
+          .premium-social:hover {
+            transform: scale(1.2);
+            color: #ffc107;
+          }
+          .premium-footer {
+            backdrop-filter: blur(6px);
+          }
+        `}
+      </style>
     </footer>
   );
 }

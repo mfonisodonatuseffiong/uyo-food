@@ -28,9 +28,27 @@ export default function TestimonialsPage() {
   return (
     <section className="py-5 bg-warning overflow-hidden" id="testimonials">
       <div className="container">
-        <h2 className="fw-bold text-danger mb-5 text-center">
-          <i className="fas fa-comments text-warning me-2"></i>
-          What People Say
+        {/* Gradient Section Title */}
+        <h2
+          className="fw-bold mb-5 text-center position-relative d-inline-block"
+          style={{
+            background: "linear-gradient(90deg, #dc3545, #ffc107)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
+        >
+          <i className="fas fa-comments text-danger me-2"></i> What People Say
+          <span
+            className="position-absolute start-50 translate-middle-x"
+            style={{
+              bottom: "-8px",
+              width: "60%",
+              height: "4px",
+              background: "linear-gradient(90deg, #dc3545, #ffc107)",
+              borderRadius: "2px",
+              animation: "pulseUnderline 2s infinite",
+            }}
+          ></span>
         </h2>
       </div>
 
@@ -49,32 +67,53 @@ export default function TestimonialsPage() {
           {[...testimonials, ...testimonials].map((t, idx) => (
             <div
               key={idx}
-              className="card shadow rounded-4 text-center p-4"
+              className="card shadow-lg rounded-4 text-center p-4 premium-card"
               style={{
                 minWidth: "300px",
                 maxWidth: "300px",
+                backdropFilter: "blur(6px)",
+                background: "rgba(255,255,255,0.85)",
+                transition: "transform 0.3s ease",
               }}
             >
-              <img
+              {/* Animated Avatar */}
+              <motion.img
                 src={t.image}
                 alt={t.name}
-                className="rounded-circle mb-3 mx-auto"
+                className="rounded-circle mb-3 mx-auto shadow-sm"
                 style={{
                   width: "100px",
                   height: "100px",
                   objectFit: "cover",
                 }}
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.3 }}
               />
 
               <h5 className="fw-bold text-danger">{t.name}</h5>
               <p className="text-warning mb-2">{t.role}</p>
-              <p className="text-secondary fst-italic">
-                “{t.feedback}”
+              <p
+                className="text-secondary fst-italic"
+                style={{ fontSize: "0.9rem", position: "relative" }}
+              >
+                <span style={{ color: "#dc3545", fontSize: "1.2rem" }}>“</span>
+                {t.feedback}
+                <span style={{ color: "#dc3545", fontSize: "1.2rem" }}>”</span>
               </p>
             </div>
           ))}
         </motion.div>
       </div>
+
+      <style>
+        {`
+          @keyframes pulseUnderline {
+            0% { transform: scaleX(0.8); opacity: 0.6; }
+            50% { transform: scaleX(1); opacity: 1; }
+            100% { transform: scaleX(0.8); opacity: 0.6; }
+          }
+        `}
+      </style>
     </section>
   );
 }

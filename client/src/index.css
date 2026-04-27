@@ -1,142 +1,253 @@
-
-/* Root Variables */
+/* ============================= */
+/* 1. Root Variables (Design System) */
+/* ============================= */
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
+  --uyo-green: #006400;
+  --uyo-yellow: #FFB30E;
+  --uyo-red: #dc3545;
+
+  --text: #333;
+  --text-dark: #08060d;
+  --bg: #ffffff;
+
   --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --transition: all 0.3s ease;
+
+  --font-main: "Segoe UI", Arial, sans-serif;
 }
 
-
-/* Responsive Font */
-@media (max-width: 1024px) {
-  :root {
-    font-size: 16px;
-  }
-}
-
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
-      rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-
-/* Body */
-body {
+/* ============================= */
+/* 2. Reset + Base Layout */
+/* ============================= */
+* {
   margin: 0;
-}
-
-
-/* Root Container */
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
+  padding: 0;
   box-sizing: border-box;
 }
 
-
-/* Headings */
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
+/* ============================= */
+/* 3. Responsive Typography */
+/* ============================= */
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-}
-
-@media (max-width: 1024px) {
-  h1 {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--uyo-green);
 }
 
 h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--uyo-yellow);
 }
 
-@media (max-width: 1024px) {
-  h2 {
-    font-size: 20px;
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* ============================= */
+/* 4. Layout Sections (Mobile-first) */
+/* ============================= */
+section {
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+  section {
+    padding: 3rem 2rem;
   }
 }
 
-
-/* Paragraph */
-p {
-  margin: 0;
+@media (min-width: 1200px) {
+  section {
+    padding: 4rem 6rem;
+  }
 }
 
+/* ============================= */
+/* 5. Hero Section Fix (IMPORTANT) */
+/* ============================= */
+.hero,
+#home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
 
-/* Code + Counter */
-code,
-.counter {
-  font-family: var(--mono);
+/* background image safety */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.6);
+  transition: var(--transition);
+}
+
+/* ============================= */
+/* 6. Cards (Mobile Safe) */
+/* ============================= */
+.card {
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  background: #fff;
+  width: 100%;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+}
+
+/* prevent overflow on mobile */
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================= */
+/* 7. Buttons (Mobile Friendly) */
+/* ============================= */
+button,
+.premium-btn,
+.glass-btn {
+  border: none;
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  font-weight: 600;
+}
+
+.premium-btn {
+  background: var(--uyo-red);
+  color: white;
+  padding: 0.75rem 1rem;
+}
+
+.premium-btn:hover {
+  transform: scale(1.03);
+  box-shadow: 0 0 15px rgba(220,53,69,0.5);
+}
+
+/* full width buttons on mobile */
+@media (max-width: 576px) {
+  .premium-btn {
+    width: 100%;
+  }
+}
+
+/* ============================= */
+/* 8. Navbar (Mobile Optimized) */
+/* ============================= */
+.navbar {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+/* mobile nav spacing */
+@media (max-width: 768px) {
+  .navbar {
+    padding: 0.6rem 1rem;
+  }
+}
+
+/* ============================= */
+/* 9. Images Responsive Fix */
+/* ============================= */
+img {
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+}
+
+/* ============================= */
+/* 10. Footer */
+/* ============================= */
+footer {
+  background: var(--uyo-green);
+  color: white;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+footer a {
+  color: var(--uyo-yellow);
+  text-decoration: none;
+}
+
+/* ============================= */
+/* 11. Focus Accessibility */
+/* ============================= */
+a:focus,
+button:focus,
+input:focus,
+textarea:focus {
+  outline: 2px solid var(--uyo-yellow);
+  outline-offset: 3px;
+}
+
+/* ============================= */
+/* 12. Utility Fixes for Mobile */
+/* ============================= */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.flex-wrap-mobile {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 576px) {
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+.cta-btn{
+  position: relative;
+  z-index: 1;
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  align-items: center;
+  justify-content: center;
 }
 
-
-/* Code */
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* Fix hover detection area */
+.cta-btn::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  pointer-events: none; /* 👈 THIS fixes hover blocking */
 }
-
