@@ -43,7 +43,7 @@ html, body, #root {
 }
 
 /* ============================= */
-/* 3. Responsive Typography */
+/* 3. Typography */
 /* ============================= */
 h1 {
   font-size: clamp(1.8rem, 4vw, 3rem);
@@ -63,7 +63,7 @@ p {
 }
 
 /* ============================= */
-/* 4. Layout Sections (Mobile-first) */
+/* 4. Layout Sections */
 /* ============================= */
 section {
   padding: 2rem 1rem;
@@ -82,7 +82,7 @@ section {
 }
 
 /* ============================= */
-/* 5. Hero Section Fix (IMPORTANT) */
+/* 5. Hero */
 /* ============================= */
 .hero,
 #home {
@@ -93,7 +93,6 @@ section {
   overflow: hidden;
 }
 
-/* background image safety */
 .hero-bg {
   position: absolute;
   inset: 0;
@@ -104,7 +103,7 @@ section {
 }
 
 /* ============================= */
-/* 6. Cards (Mobile Safe) */
+/* 6. Global Cards */
 /* ============================= */
 .card {
   border: none;
@@ -120,7 +119,6 @@ section {
   box-shadow: 0 12px 25px rgba(0,0,0,0.15);
 }
 
-/* prevent overflow on mobile */
 .card img {
   width: 100%;
   height: auto;
@@ -128,7 +126,7 @@ section {
 }
 
 /* ============================= */
-/* 7. Buttons (Mobile Friendly) */
+/* 7. Buttons */
 /* ============================= */
 button,
 .premium-btn,
@@ -146,20 +144,8 @@ button,
   padding: 0.75rem 1rem;
 }
 
-.premium-btn:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 15px rgba(220,53,69,0.5);
-}
-
-/* full width buttons on mobile */
-@media (max-width: 576px) {
-  .premium-btn {
-    width: 100%;
-  }
-}
-
 /* ============================= */
-/* 8. Navbar (Mobile Optimized) */
+/* 8. Navbar */
 /* ============================= */
 .navbar {
   width: 100%;
@@ -171,15 +157,8 @@ button,
   z-index: 999;
 }
 
-/* mobile nav spacing */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 0.6rem 1rem;
-  }
-}
-
 /* ============================= */
-/* 9. Images Responsive Fix */
+/* 9. Images */
 /* ============================= */
 img {
   max-width: 100%;
@@ -201,53 +180,4 @@ footer {
 footer a {
   color: var(--uyo-yellow);
   text-decoration: none;
-}
-
-/* ============================= */
-/* 11. Focus Accessibility */
-/* ============================= */
-a:focus,
-button:focus,
-input:focus,
-textarea:focus {
-  outline: 2px solid var(--uyo-yellow);
-  outline-offset: 3px;
-}
-
-/* ============================= */
-/* 12. Utility Fixes for Mobile */
-/* ============================= */
-.container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.flex-wrap-mobile {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 576px) {
-  .hide-mobile {
-    display: none !important;
-  }
-}
-
-.cta-btn{
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Fix hover detection area */
-.cta-btn::before{
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none; /* 👈 THIS fixes hover blocking */
 }

@@ -17,16 +17,16 @@ function HeroSection() {
 
   const navigate = useNavigate();
 
+  // Background Carousel
   useEffect(() => {
     setFadeIn(true);
 
     const interval = setInterval(() => {
       setAnimate(false);
-
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % images.length);
         setAnimate(true);
-      }, 400);
+      }, 500);
     }, 5000);
 
     return () => clearInterval(interval);
@@ -41,50 +41,31 @@ function HeroSection() {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-
-        setSearchValue(`Lat:${latitude}, Lng:${longitude}`);
-
-        navigate(
-          `/restaurants?lat=${latitude}&lng=${longitude}&type=${orderType}`
-        );
+        setSearchValue(`Near me (${latitude.toFixed(4)}, ${longitude.toFixed(4)})`);
+        navigate(`/restaurants?lat=${latitude}&lng=${longitude}&type=${orderType}`);
       },
       (error) => {
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            alert("Location permission denied.");
-            break;
-          case error.POSITION_UNAVAILABLE:
-            alert("Location unavailable.");
-            break;
-          case error.TIMEOUT:
-            alert("Request timed out.");
-            break;
-          default:
-            alert("Unable to fetch location.");
-        }
+        const messages = {
+          [error.PERMISSION_DENIED]: "Location permission denied.",
+          [error.POSITION_UNAVAILABLE]: "Location information unavailable.",
+          [error.TIMEOUT]: "Request timed out.",
+        };
+        alert(messages[error.code] || "Unable to fetch location.");
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
   const handleSearch = () => {
     if (searchValue.trim()) {
-      navigate(
-        `/restaurants?dish=${encodeURIComponent(
-          searchValue
-        )}&type=${orderType}`
-      );
+      navigate(`/restaurants?dish=${encodeURIComponent(searchValue)}&type=${orderType}`);
     } else {
       navigate(`/restaurants?type=${orderType}`);
     }
-
     setSuggestions([]);
   };
 
+  // Live Suggestions
   useEffect(() => {
     if (!searchValue.trim()) {
       setSuggestions([]);
@@ -95,250 +76,217 @@ function HeroSection() {
     const matches = [];
 
     restaurants.forEach((r) => {
-      if (r.name.toLowerCase().includes(lower)) {
-        matches.push(r.name);
-      }
-
-      r.menu.forEach((item) => {
-        if (item.name.toLowerCase().includes(lower)) {
-          matches.push(item.name);
-        }
+      if (r.name.toLowerCase().includes(lower)) matches.push(r.name);
+      r.menu?.forEach((item) => {
+        if (item.name.toLowerCase().includes(lower)) matches.push(item.name);
       });
     });
 
-    setSuggestions(matches.slice(0, 5));
+    setSuggestions(matches.slice(0, 6));
   }, [searchValue]);
-const categories = [
-  { name: "Soups", icon: "🍲" },
-  { name: "Rice", icon: "🍛" },
-  { name: "Ice Cream", icon: "🍦" },
-  { name: "Grills", icon: "🍖" },
-  { name: "Swallows", icon: "🥘" },
-  { name: "Drinks", icon: "🥤" },
-];
+
+  const categories = [
+    { name: "Soups", icon: "🍲" },
+    { name: "Rice", icon: "🍛" },
+    { name: "Pizza", icon: "🍕" },
+    { name: "Ice Cream", icon: "🍨" },
+    { name: "Bread", icon: "🍞" },
+    { name: "Cake", icon: "🍰" },
+    { name: "Drinks", icon: "🥤" },
+  ];
+
+  const localFavourites = [
+    "Edikan Ikong", "Afia Efere", "Atama Soup", "Ekpang Nkuwo", "Afang"
+  ];
 
   return (
     <section
       id="home"
-      className={`position-relative d-flex align-items-center text-dark animate__animated ${
+      className={`position-relative d-flex align-items-center text-white animate__animated ${
         fadeIn ? "animate__fadeIn" : ""
       }`}
       style={{ minHeight: "100vh" }}
     >
-      {/* Background */}
+      {/* Background Image */}
       <div
         className="position-absolute top-0 start-0 w-100 h-100"
         style={{
           backgroundImage: `url(${images[currentIndex]})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "brightness(.6)",
-          transition: "all .8s ease",
+          filter: "brightness(0.58)",
+          transition: "all 0.9s ease",
           opacity: animate ? 1 : 0,
-          transform: animate ? "scale(1)" : "scale(1.05)",
+          transform: animate ? "scale(1)" : "scale(1.06)",
         }}
       />
 
-      {/* Content */}
-      <div className="container position-relative text-center text-lg-start py-5">
+      {/* Overlay */}
+      <div className="position-absolute top-0 start-0 w-100 h-100 bg-black/50" />
+
+      <div className="container position-relative py-4 py-md-5">
         <div className="row justify-content-center">
-          <div className="col-lg-8 col-xl-8">
-            <span className="badge bg-danger mb-3 px-3 py-2 rounded-pill shadow-lg premium-badge">
-              Fast Delivery
+          <div className="col-lg-9 col-xl-8">
+            {/* Badge */}
+            <span className="badge bg-danger mb-3 mb-md-4 px-4 py-2 rounded-pill shadow-lg fw-semibold">
+              ⚡ Fast Delivery • Uyo
             </span>
 
+            {/* Heading */}
             <h1
-              className="fw-bold display-1 mb-3"
+              className="fw-bold display-2 display-md-1 mb-3 mb-md-4"
               style={{
-                background: "linear-gradient(90deg,#ffc107,#fff)",
+                background: "linear-gradient(90deg, #ffc107, #ffffff)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
+                lineHeight: "1.05",
               }}
             >
               Taste Local Favourites in{" "}
               <span className="text-warning">Uyo</span>
             </h1>
 
-            <p className="lead mb-4 text-danger rounded-pill shadow-sm"
+            <p
+              className="lead mb-4 mb-md-5 fw-semibold rounded-pill shadow-sm d-inline-block"
               style={{
                 background: "linear-gradient(135deg, #ffc107 0%, #ffcd39 50%, #ffda6a 100%)",
-                padding: "0.75rem 1.25rem",
-                fontWeight: "600",
-                animation: "blinkGlow 2s infinite",
+                color: "#b62020",
+                padding: "0.75rem 1.6rem",
+                fontSize: "1.08rem",
+                animation: "glowPulse 2.5s infinite",
               }}
             >
-              Discover traditional dishes delivered hot and fresh.
+              Discover traditional dishes delivered hot and fresh
             </p>
 
-            <style>
-              {`
-                @keyframes blinkGlow {
-                  0% {
-                    box-shadow: 0 0 10px rgba(255,193,7,0.4);
-                  }
-                  50% {
-                    box-shadow: 0 0 20px rgba(255,193,7,0.8);
-                  }
-                  100% {
-                    box-shadow: 0 0 10px rgba(255,193,7,0.4);
-                  }
-                }
-              `}
-            </style>
-
-            
-          
-                     {/* Search Card */}
+            {/* Compact Premium Search Card - Fully Responsive */}
             <div
-              className="card border-0 shadow-lg rounded-4 p-4 mb-4 premium-card"
+              className="card border-0 shadow-2xl rounded-4 rounded-md-5 mb-5 overflow-hidden mx-auto"
               style={{
-                background: "linear-gradient(135deg, rgba(255,193,7,0.25) 0%, rgba(255,193,7,0.4) 100%)", // full warning glass blend
-                backdropFilter: "blur(14px) saturate(160%)", // frosted glass effect
-                WebkitBackdropFilter: "blur(14px) saturate(160%)",
-                border: "1px solid rgba(255,193,7,0.4)",
-                color: "#333",
+                background: "rgba(255, 255, 255, 0.92)",
+                backdropFilter: "blur(24px) saturate(180%)",
+                WebkitBackdropFilter: "blur(24px) saturate(180%)",
+                border: "1px solid rgba(255, 193, 7, 0.4)",
+                maxWidth: "580px",           // Controlled width on large screens
               }}
             >
-              <ul className="nav nav-pills nav-justified mb-4">
-                <li className="nav-item">
-                  <button
-                    onClick={() => setOrderType("delivery")}
-                    className={`nav-link fw-bold rounded-pill px-3 py-2 ${
-                      orderType === "delivery"
-                        ? "active bg-danger text-white shadow-sm"
-                        : "bg-light text-warning"
-                    }`}
-                  >
-                    <i className="fas fa-motorcycle me-2 text-warning"></i>
-                    Delivery
-                  </button>
-                </li>
+              <div className="p-4 p-md-5 pb-3 pb-md-4">
+                {/* Order Type Tabs */}
+                <ul className="nav nav-pills nav-justified gap-2 mb-4">
+                  <li className="nav-item flex-fill">
+                    <button
+                      onClick={() => setOrderType("delivery")}
+                      className={`nav-link fw-bold py-2.5 py-md-3 rounded-4 text-center ${
+                        orderType === "delivery"
+                          ? "active bg-danger text-white shadow"
+                          : "bg-white text-warning border border-warning-subtle"
+                      }`}
+                    >
+                      <i className="fas fa-motorcycle me-2"></i>
+                      Delivery
+                    </button>
+                  </li>
+                  <li className="nav-item flex-fill">
+                    <button
+                      onClick={() => setOrderType("pickup")}
+                      className={`nav-link fw-bold py-2.5 py-md-3 rounded-4 text-center ${
+                        orderType === "pickup"
+                          ? "active bg-warning text-white shadow"
+                          : "bg-white text-warning border border-warning-subtle"
+                      }`}
+                    >
+                      <i className="fas fa-shopping-bag me-2"></i>
+                      Pickup
+                    </button>
+                  </li>
+                </ul>
 
-                <li className="nav-item">
-                  <button
-                    onClick={() => setOrderType("pickup")}
-                    className={`nav-link fw-bold rounded-pill px-3 py-2 ${
-                      orderType === "pickup"
-                        ? "active bg-warning text-white shadow-sm"
-                        : "bg-light text-warning"
-                    }`}
-                  >
-                    <i className="fas fa-shopping-bag me-2 text-warning"></i>
-                    Pickup
-                  </button>
-                </li>
-              </ul>
+                {/* Search Input */}
+                <div className="position-relative">
+                  <div className="input-group input-group-lg">
+                    <span className="input-group-text bg-white border-0 ps-3 ps-md-4">
+                      <i className="fas fa-map-marker-alt text-warning fs-4"></i>
+                    </span>
+                    <input
+                      className="form-control border-0 py-3 fw-medium"
+                      placeholder="Find food near you"
+                      value={searchValue}
+                      onChange={(e) => setSearchValue(e.target.value)}
+                      style={{ fontSize: "1.05rem" }}
+                    />
+                    <button
+                      onClick={handleGeoLocation}
+                      className="btn btn-outline-warning px-3 px-md-4"
+                    >
+                      <i className="fas fa-crosshairs"></i>
+                    </button>
+                  </div>
 
-              <div className="d-flex flex-column gap-3 position-relative">
-                <div className="input-group premium-search">
-                  <span className="input-group-text bg-light border-0">
-                    <i className="fas fa-map-marker-alt text-warning"></i>
-                  </span>
+                  {/* Suggestions */}
+                  {suggestions.length > 0 && (
+                    <ul
+                      className="list-group position-absolute w-100 mt-2 shadow-xl rounded-4 overflow-hidden"
+                      style={{ zIndex: 2000, background: "rgba(255,255,255,0.97)" }}
+                    >
+                      {suggestions.map((s, i) => (
+                        <li
+                          key={i}
+                          className="list-group-item list-group-item-action border-0 py-3 px-4 fw-medium"
+                          style={{ cursor: "pointer" }}
+                          onClick={() => {
+                            setSearchValue(s);
+                            navigate(`/restaurants?dish=${encodeURIComponent(s)}&type=${orderType}`);
+                            setSuggestions([]);
+                          }}
+                        >
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
-                  <input
-                    className="form-control border-0"
-                    placeholder="Find food near you"
-                    value={searchValue}
-                    onChange={(e) => setSearchValue(e.target.value)}
-                  />
-
-                  <button
-                    onClick={handleGeoLocation}
-                    className="btn btn-outline-warning px-3"
-                  >
-                    <i className="fas fa-crosshairs"></i>
-                  </button>
-
-                
-                </div>
-
-                {suggestions.length > 0 ? (
-                  <ul
-                    className="list-group position-absolute mt-1 shadow-lg premium-dropdown"
-                    style={{ zIndex: 2000 }}
-                  >
-                    {suggestions.map((s, i) => (
-                      <li
-                        key={i}
-                        className="list-group-item list-group-item-action small text-warning"
-                        style={{ cursor: "pointer" }}
-                        onClick={() => {
-                          setSearchValue(s);
-                          navigate(
-                            `/restaurants?dish=${encodeURIComponent(
-                              s
-                            )}&type=${orderType}`
-                          );
-                          setSuggestions([]);
-                        }}
-                      >
-                        {s}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  searchValue.trim().length > 0 && (
-                    <div className="position-absolute mt-1 bg-light border rounded shadow-sm px-2 py-1 small text-muted">
+                  {searchValue.trim().length > 0 && suggestions.length === 0 && (
+                    <div className="position-absolute mt-2 bg-white border rounded-4 shadow-sm p-3 text-muted small w-100">
                       No results found
                     </div>
-                  )
-                )}
+                  )}
+                </div>
+
+                {/* Explore Button */}
+                <button
+                  onClick={handleSearch}
+                  className="btn fw-bold w-100 mt-4 py-3.5 rounded-4 fs-6 fs-md-5"
+                  style={{
+                    background: "linear-gradient(135deg, #ffc107 0%, #ffcd39 50%, #ffda6a 100%)",
+                    color: "#b62020",
+                    boxShadow: "0 8px 25px rgba(255,193,7,0.45)",
+                    transition: "all 0.4s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 12px 35px rgba(255,193,7,0.55)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "0 8px 25px rgba(255,193,7,0.45)";
+                  }}
+                >
+                  Explore Restaurants
+                  <i className="fas fa-chevron-right ms-2" style={{ color: "#fff" }}></i>
+                </button>
               </div>
-
-                            <button
-                onClick={() => navigate(`/restaurants?type=${orderType}`)}
-                className="btn fw-bold rounded-pill px-4 mt-3 premium-btn"
-                style={{
-                  background: "linear-gradient(135deg, #ffc107 0%, #ffcd39 50%, #ffda6a 100%)",
-                  color: "#b62020",
-                  boxShadow: "0 6px 20px rgba(255,193,7,0.4)",
-                  transition: "all 0.3s ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background =
-                    "linear-gradient(135deg, #ffda6a 0%, #ffc107 50%, #ffcd39 100%)";
-                  e.currentTarget.style.boxShadow =
-                    "0 8px 24px rgba(255,193,7,0.6)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background =
-                    "linear-gradient(135deg, #ffc107 0%, #ffcd39 50%, #ffda6a 100%)";
-                  e.currentTarget.style.boxShadow =
-                    "0 6px 20px rgba(255,193,7,0.4)";
-                }}
-              >
-                Explore Restaurants
-                <i
-                  className="fas fa-chevron-right ms-2"
-                  style={{ color: "#fff" }}
-                ></i>
-              </button>
-
             </div>
 
-            {/* Local Favourites */}
+            {/* Local Favourites & Categories */}
             <div>
-              <h6 className="fw-bold text-light mb-2">
-                Local Favourites
-              </h6>
-
-              <div className="d-flex flex-wrap gap-2 mb-4">
-                {[
-                  "Edikan Ikong",
-                  "Afia Efere",
-                  "Atama Soup",
-                  "Ekpang Nkuwo",
-                  "Afang",
-                ].map((dish, idx) => (
+              <h6 className="fw-bold text-light mb-3">Local Favourites</h6>
+              <div className="d-flex flex-wrap gap-2 mb-5">
+                {localFavourites.map((dish, idx) => (
                   <button
                     key={idx}
-                    className="badge bg-danger text-white rounded-pill px-3 py-2 border-0 premium-badge"
+                    className="badge bg-danger text-white rounded-pill px-4 py-2.5 border-0 fw-medium premium-badge"
                     onClick={() =>
-                      navigate(
-                        `/restaurants?dish=${encodeURIComponent(
-                          dish
-                        )}&type=${orderType}`
-                      )
+                      navigate(`/restaurants?dish=${encodeURIComponent(dish)}&type=${orderType}`)
                     }
                   >
                     {dish}
@@ -346,107 +294,75 @@ const categories = [
                 ))}
               </div>
 
-              <h6 className="fw-bold text-light mb-3">
-                Browse Categories
-              </h6>
-
-              <div className="d-flex flex-row flex-nowrap overflow-auto premium-scroll">
+              <h6 className="fw-bold text-light mb-3">Browse Categories</h6>
+              <div className="d-flex flex-row flex-nowrap overflow-auto gap-3 premium-scroll pb-3">
                 {categories.map((cat, index) => (
-                  <div
-                    key={index}
-                    className="flex-shrink-0 me-3"
-                    style={{ minWidth: "140px" }}
-                  >
+                  <div key={index} className="flex-shrink-0" style={{ minWidth: "130px" }}>
                     <button
-                      className="w-100 border-0 rounded-4 category-card premium-card"
+                      className="w-100 border-0 rounded-4 category-card premium-card py-4"
                       onClick={() =>
-                        navigate(
-                          `/restaurants?category=${encodeURIComponent(
-                            cat.name
-                          )}&type=${orderType}`
-                        )
+                        navigate(`/restaurants?category=${encodeURIComponent(cat.name)}&type=${orderType}`)
                       }
                     >
-                      <div className="fs-2 mb-2">{cat.icon}</div>
-
-                      <div className="fw-bold">
-                        {cat.name}
-                      </div>
+                      <div className="fs-1 mb-3">{cat.icon}</div>
+                      <div className="fw-bold fs-6">{cat.name}</div>
                     </button>
                   </div>
                 ))}
               </div>
             </div>
-
           </div>
         </div>
       </div>
 
-      <div className="position-absolute bottom-3 start-50 translate-middle-x text-white d-lg-none">
-        <i className="fas fa-chevron-down fa-2x"></i>
+      {/* Mobile Scroll Indicator */}
+      <div className="position-absolute bottom-4 start-50 translate-middle-x text-white d-lg-none">
+        <i className="fas fa-chevron-down fa-2x opacity-75"></i>
       </div>
 
-      <style>
-        {`
-        .premium-card{
-          transition:.3s;
-          border-radius:1rem;
+      {/* Custom Styles */}
+      <style>{`
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 12px rgba(255,193,7,0.5); }
+          50% { box-shadow: 0 0 25px rgba(255,193,7,0.85); }
         }
 
-        .premium-card:hover{
-          transform:translateY(-5px);
+        .premium-card:hover {
+          transform: translateY(-5px);
         }
 
-        .premium-search input:focus{
-          box-shadow:0 0 8px rgba(220,53,69,.5);
+        .category-card {
+          background: linear-gradient(135deg, #fff8f0, #ffefdb);
+          box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+          transition: all 0.4s ease;
+          text-align: center;
+          color: #212529;
         }
 
-        .premium-dropdown li:hover{
-          background:rgba(220,53,69,.1);
+        .category-card:hover {
+          transform: translateY(-8px) scale(1.04);
+          box-shadow: 0 15px 35px rgba(255, 193, 7, 0.25);
         }
 
-        .premium-btn{
-          transition:.3s;
+        .premium-scroll::-webkit-scrollbar {
+          height: 6px;
+        }
+        .premium-scroll::-webkit-scrollbar-thumb {
+          background: rgba(255, 193, 7, 0.6);
+          border-radius: 10px;
         }
 
-        .premium-btn:hover{
-          transform:scale(1.05);
-          box-shadow:0 0 14px rgba(220,53,69,.5);
+        /* Mobile Optimizations */
+        @media (max-width: 576px) {
+          h1 {
+            font-size: 2.4rem;
+          }
+          .card {
+            margin-left: 10px;
+            margin-right: 10px;
+          }
         }
-
-        .premium-badge{
-          transition:.3s;
-        }
-
-        .premium-badge:hover{
-          transform:scale(1.05);
-        }
-
-        .category-card{
-          background:linear-gradient(135deg,#ffefef,#ffe5e5);
-          padding:18px;
-          transition:.35s;
-          box-shadow:0 6px 20px rgba(0,0,0,.08);
-          text-align:center;
-          color:#212529;
-        }
-
-        .category-card:hover{
-          transform:translateY(-6px) scale(1.03);
-          box-shadow:0 12px 30px rgba(0,0,0,.18);
-          background:linear-gradient(135deg,#fff0f0,#ffd6d6);
-        }
-
-        .premium-scroll::-webkit-scrollbar{
-          height:6px;
-        }
-
-        .premium-scroll::-webkit-scrollbar-thumb{
-          background:rgba(220,53,69,.5);
-          border-radius:3px;
-        }
-        `}
-      </style>
+      `}</style>
     </section>
   );
 }
