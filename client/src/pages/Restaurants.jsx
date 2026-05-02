@@ -187,9 +187,16 @@ export default function Restaurants() {
 
                   {/* META */}
                   <div className="meta-row">
-                    <span>⏱ {restaurant.eta} min</span>
-                    <span>📍 {restaurant.distance} km</span>
-                  </div>
+                    <span className="meta-pill">
+                     <i className="fas fa-clock me-1"></i>
+                      {restaurant.eta} min
+                   </span>
+
+                  <span className="meta-pill">
+                    <i className="fas fa-location-dot me-1"></i>
+                    {restaurant.distance} km
+                  </span>
+                 </div>
 
                   {/* DESCRIPTION */}
                   <p>{restaurant.description}</p>

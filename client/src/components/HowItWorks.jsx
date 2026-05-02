@@ -4,6 +4,7 @@ import locationImg from "../assets/images/gallery/location.png";
 import orderImg from "../assets/images/gallery/order.png";
 import payImg from "../assets/images/gallery/pay.png";
 import mealsImg from "../assets/images/gallery/meals.png";
+import "../styles/howItWorks.css";
 
 export default function HowItWorks() {
   const navigate = useNavigate();
@@ -32,19 +33,15 @@ export default function HowItWorks() {
   ];
 
   return (
-    <section className="py-5 bg-warning position-relative" id="how-it-works">
-      <div className="container position-relative">
+    <section className="how-section py-5" id="how-it-works">
+      <div className="container">
         <div className="row justify-content-center g-0">
           <div className="col-xl-9">
-            {/* Section Title */}
-            <div className="col-lg-6 text-center mx-auto mb-3 mb-md-5 mt-4 position-relative d-inline-block">
+
+            {/* HEADER */}
+            <div className="how-header text-center mx-auto">
               <motion.h2
-                className="fw-bold fs-2 fs-lg-4 lh-sm my-4"
-                style={{
-                  background: "linear-gradient(90deg, #dc3545, #ffc107)",
-                  WebkitBackgroundClip: "text",
-                  WebkitTextFillColor: "transparent",
-                }}
+                className="how-title fw-bold"
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
@@ -52,34 +49,19 @@ export default function HowItWorks() {
               >
                 How Uyo-Food Works
               </motion.h2>
-              {/* Animated underline */}
-              <span
-                className="position-absolute start-50 translate-middle-x"
-                style={{
-                  bottom: "-8px",
-                  width: "60%",
-                  height: "4px",
-                  background: "linear-gradient(90deg, #dc3545, #ffc107)",
-                  borderRadius: "2px",
-                  animation: "pulseUnderline 2s infinite",
-                }}
-              ></span>
-              <p className="text-dark mt-3">
+
+              <span className="how-underline"></span>
+
+              <p className="how-subtitle mt-3">
                 Simple steps to get your favourite dishes delivered fast.
               </p>
             </div>
 
-            {/* Steps with connecting line */}
-            <div className="position-relative">
-              {/* Progress line */}
-              <div
-                className="position-absolute top-50 start-0 w-100"
-                style={{
-                  borderTop: "3px dashed #dc3545",
-                  zIndex: 1,
-                  opacity: 0.4,
-                }}
-              ></div>
+            {/* STEPS */}
+            <div className="how-steps position-relative">
+
+              {/* dashed line */}
+              <div className="how-line"></div>
 
               <div className="row position-relative">
                 {steps.map((step, index) => (
@@ -91,71 +73,55 @@ export default function HowItWorks() {
                     transition={{ duration: 0.8, delay: index * 0.2 }}
                     viewport={{ once: true }}
                   >
-                    <div
-                      className="glass-card text-center p-4 rounded shadow-lg h-100 premium-card position-relative"
-                      style={{
-                        transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                        zIndex: 2,
-                      }}
-                    >
-                      {/* Numbered step indicator */}
-                      <span
-                        className="badge bg-danger position-absolute top-0 start-50 translate-middle-x shadow-sm"
-                        style={{ fontSize: "0.9rem", marginTop: "-12px" }}
-                      >
+                    <div className="how-card text-center p-4 h-100">
+
+                      {/* number */}
+                      <span className="how-badge">
                         {index + 1}
                       </span>
 
+                      {/* image */}
                       <img
-                        className="shadow-icon mb-3 food-thumbnail"
                         src={step.img}
-                        height="100"
                         alt={step.title}
-                        style={{ transition: "transform 0.3s ease" }}
-                        onMouseEnter={(e) =>
-                          (e.currentTarget.style.transform = "scale(1.1)")
-                        }
-                        onMouseLeave={(e) =>
-                          (e.currentTarget.style.transform = "scale(1)")
-                        }
+                        className="how-icon mb-3"
                       />
-                      <h5 className="fw-bold text-danger">{step.title}</h5>
-                      <p className="text-dark small">{step.text}</p>
+
+                      <h5 className="fw-bold text-danger">
+                        {step.title}
+                      </h5>
+
+                      <p className="text-dark small">
+                        {step.text}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* CTA Buttons */}
+            {/* CTA */}
             <div className="text-center mt-4">
               <button
-                className="glass-btn btn btn-danger rounded-pill fw-bold px-4 me-3 shadow-sm"
+                className="btn btn-danger rounded-pill fw-bold px-4 me-3 how-btn-primary"
                 onClick={() => navigate("/restaurants?type=delivery")}
               >
-                <i className="fas fa-utensils me-2"></i> Start Ordering
+                <i className="fas fa-utensils me-2"></i>
+                Start Ordering
               </button>
+
               <button
-                className="glass-btn btn btn-warning rounded-pill fw-bold px-4 shadow-sm"
+                className="btn btn-warning rounded-pill fw-bold px-4 how-btn-secondary"
                 onClick={() => navigate("/restaurants")}
               >
-                <i className="fas fa-list me-2"></i> Explore Restaurants
+                <i className="fas fa-list me-2"></i>
+                Explore Restaurants
               </button>
             </div>
+
           </div>
         </div>
       </div>
-
-      {/* Animated underline keyframes */}
-      <style>
-        {`
-          @keyframes pulseUnderline {
-            0% { transform: scaleX(0.8); opacity: 0.6; }
-            50% { transform: scaleX(1); opacity: 1; }
-            100% { transform: scaleX(0.8); opacity: 0.6; }
-          }
-        `}
-      </style>
     </section>
   );
 }

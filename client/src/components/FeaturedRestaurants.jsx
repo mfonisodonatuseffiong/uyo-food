@@ -33,12 +33,12 @@ function FeaturedRestaurants() {
   ];
 
   return (
-    <section className="featured-section py-5" id="restaurants">
+    <section className="restaurants-section" id="restaurants">
       <div className="container">
 
         {/* Title */}
         <motion.h2
-          className="featured-title text-center fw-bold mb-5 position-relative d-inline-block mx-auto"
+          className="section-header"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -46,7 +46,6 @@ function FeaturedRestaurants() {
         >
           <i className="fas fa-store me-2 text-danger"></i>
           Featured Restaurants
-          <span className="featured-underline"></span>
         </motion.h2>
 
         {/* Restaurant Cards */}
@@ -61,40 +60,31 @@ function FeaturedRestaurants() {
               viewport={{ once: true }}
             >
               <div
-                className="restaurant-card h-100 rounded overflow-hidden"
+                className="restaurant-card"
                 onClick={() =>
                   navigate(`/restaurants?dish=${encodeURIComponent(r.highlight)}&type=delivery`)
                 }
               >
-                {/* Badge */}
-                <motion.span
-                  className="restaurant-badge badge bg-danger position-absolute top-0 start-0 m-3 px-3 py-2 rounded-pill shadow"
-                  animate={{ scale: [1, 1.08, 1] }}
-                  transition={{ repeat: Infinity, duration: 2.5 }}
-                >
-                  {r.badge}
-                </motion.span>
+                {/* Tag */}
+                <span className="restaurant-tag">{r.badge}</span>
 
                 {/* Image */}
-                <div className="restaurant-img-wrapper">
+                <div className="restaurant-img-wrap">
                   <img
                     src={r.img}
                     alt={r.name}
-                    className="restaurant-img"
+                    className="restaurant-banner"
                   />
                 </div>
 
                 {/* Content */}
-                <div className="card-body p-4 d-flex flex-column text-center">
-                  <h5 className="card-title fw-bold mb-2">{r.name}</h5>
-                  <p className="card-text flex-grow-1 mb-3">{r.description}</p>
-
-                  <p className="restaurant-highlight fw-bold text-danger mb-4">
-                    {r.highlight}
-                  </p>
+                <div className="card-body">
+                  <h5 className="fw-bold">{r.name}</h5>
+                  <p>{r.description}</p>
+                  <p className="restaurant-highlight fw-bold text-danger">{r.highlight}</p>
 
                   <button
-                    className="premium-btn btn btn-danger w-100 rounded-pill fw-bold py-3"
+                    className="restaurant-order-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate(`/restaurants?dish=${encodeURIComponent(r.highlight)}&type=delivery`);
@@ -118,7 +108,7 @@ function FeaturedRestaurants() {
           viewport={{ once: true }}
         >
           <motion.button
-            className="premium-btn btn btn-danger btn-lg rounded-pill fw-bold px-5 py-3 shadow"
+            className="restaurant-order-btn"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => navigate("/restaurants")}

@@ -1,0 +1,38 @@
+.hero-banner {
+  width: 100%;
+  position: relative;
+  margin-top: 61px; /* offset for sticky navbar height */
+}
+
+.banner-img {
+  width: 100%;
+  height: auto;
+  max-height: 140px;
+  object-fit: cover;
+  display: block;
+}
+
+/* ✅ Overlay text */
+.banner-overlay {
+  position: absolute;
+  top: 50%;
+  left: 80%;
+  transform: translate(-50%, -50%);
+  background: rgba(220, 53, 69, 0.85); /* red semi-transparent */
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.banner-overlay a {
+  color: #ffc107; /* yellow highlight */
+  text-decoration: none;
+  font-weight: 800;
+}
+
+.banner-overlay a:hover {
+  text-decoration: underline;
+}

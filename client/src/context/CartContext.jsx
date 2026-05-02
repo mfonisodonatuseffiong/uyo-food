@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useState, useEffect } from "reac
 const CartContext = createContext();
 
 /* =========================
-   CART REDUCER (PRODUCTION)
+   CART REDUCER (FIXED)
 ========================= */
 const cartReducer = (state, action) => {
   switch (action.type) {
@@ -12,9 +12,7 @@ const cartReducer = (state, action) => {
       const item = action.payload;
 
       const existingIndex = state.findIndex(
-        (i) =>
-          i.restaurant === item.restaurant &&
-          i.dish === item.dish
+        (i) => i.id === item.id
       );
 
       if (existingIndex !== -1) {
@@ -51,23 +49,30 @@ const cartReducer = (state, action) => {
    PROVIDER
 ========================= */
 export const CartProvider = ({ children }) => {
-  const [cart, dispatch] = useReducer(cartReducer, [], () => {
-    const saved = localStorage.getItem("cart");
-    return saved ? JSON.parse(saved) : [];
-  });
+
+  const [cart, dispatch] = useReducer(
+    cartReducer,
+    [],
+    () => {
+      try {
+        const saved = localStorage.getItem("cart");
+        return saved ? JSON.parse(saved) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+  );
 
   const [notifications, setNotifications] = useState([]);
 
-  /* =========================
-     PERSIST CART (REAL APP BEHAVIOR)
-  ========================= */
+  /* persist cart */
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    try {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } catch (e) {}
   }, [cart]);
 
-  /* =========================
-     NOTIFICATIONS
-  ========================= */
+  /* notifications */
   const showNotification = (message, type = "info") => {
     const id = Date.now();
 
@@ -83,14 +88,12 @@ export const CartProvider = ({ children }) => {
     }, 3000);
   };
 
-  /* =========================
-     ADD ITEM (BACKEND READY SHAPE)
-  ========================= */
+  /* ADD ITEM */
   const addItem = (item) => {
     dispatch({
       type: "ADD_ITEM",
       payload: {
-        id: `${item.restaurant}-${item.dish}`, // stable ID
+        id: `${item.restaurant}-${item.dish}`,
         restaurant: item.restaurant,
         dish: item.dish,
         price: item.price,

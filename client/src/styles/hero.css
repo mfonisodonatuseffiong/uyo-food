@@ -1,0 +1,259 @@
+.hero-section {
+  background: var(--uyo-yellow);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-top: 90px;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Badge */
+.hero-badge {
+  background: rgba(220, 53, 69, 0.9);
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  margin-bottom: 14px;
+  display: inline-block;
+  backdrop-filter: blur(6px);
+}
+
+/* Title */
+.hero-title {
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-dark);
+}
+
+.hero-title span {
+  color: var(--uyo-red);
+}
+
+.hero-subtitle {
+  margin: 10px 0 24px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* ============================= */
+/* BLENDED SEARCH CONTAINER */
+/* ============================= */
+
+.hero-card {
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  border: 1px solid rgba(255,255,255,0.4);
+}
+
+/* Toggle */
+.toggle-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.toggle-group button {
+  flex: 1;
+  padding: 9px 10px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.05);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.toggle-group button.active {
+  background: var(--uyo-red);
+  color: #fff;
+}
+
+/* ============================= */
+/* SEARCH INPUT (BLENDED) */
+/* ============================= */
+
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.8);
+  padding: 6px;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.search-box input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background: transparent;
+}
+
+.search-box input:focus {
+  box-shadow: none;
+}
+
+/* Location button */
+.geo-btn {
+  width: 42px;
+  height: 42px;
+  border: none;
+  background: var(--uyo-red);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.geo-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Suggestions */
+.suggestion-box {
+  background: #fff;
+  margin-top: 8px;
+  border-radius: 12px;
+  list-style: none;
+  padding: 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+.suggestion-box li {
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.suggestion-box li:hover {
+  background: rgba(220,53,69,0.1);
+}
+
+/* CTA Button */
+.hero-btn {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--uyo-red), #ff8c32);
+  color: #fff;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(220,53,69,0.25);
+}
+
+/* ============================= */
+/* CATEGORIES */
+/* ============================= */
+
+.section-title {
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+  color: var(--text-dark);
+}
+
+.category-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-behavior: smooth;
+}
+
+.category-card {
+  min-width: 110px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.category-card:hover {
+  transform: translateY(-4px);
+}
+
+.category-card .icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ============================= */
+/* FAVOURITES */
+/* ============================= */
+
+.favourites {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.pill {
+  background: rgba(220,53,69,0.9);
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.pill:hover {
+  transform: scale(1.05);
+}
+
+/* ============================= */
+/* MOBILE */
+/* ============================= */
+
+@media (max-width: 576px) {
+  .hero-card {
+    padding: 14px;
+    border-radius: 16px;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .geo-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .category-card {
+    min-width: 95px;
+  }
+}
