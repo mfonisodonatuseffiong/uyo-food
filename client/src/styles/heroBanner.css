@@ -1,38 +1,59 @@
 .hero-banner {
   width: 100%;
-  position: relative;
-  margin-top: 61px; /* offset for sticky navbar height */
+  position: sticky;   /* ✅ scrolls away under navbar */
+  top: 61px;          /* ✅ sits right under navbar */
+  z-index: 996;       /* below navbar but above content */
 }
 
 .banner-img {
   width: 100%;
   height: auto;
-  max-height: 140px;
+  max-height: 180px;  /* ✅ moderate height on desktop */
   object-fit: cover;
   display: block;
 }
 
-/* ✅ Overlay text */
+/* ✅ White patch overlay to hide Jumia number */
 .banner-overlay {
   position: absolute;
-  top: 50%;
-  left: 80%;
+  top: 50%;           
+  left: 90%;          
   transform: translate(-50%, -50%);
-  background: rgba(220, 53, 69, 0.85); /* red semi-transparent */
-  color: #fff;
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-weight: 700;
-  font-size: 1rem;
-  text-align: center;
+  background: white;  
+  width: 195px;       
+  height: 50px;       
+  border-radius: 6px; 
 }
 
-.banner-overlay a {
-  color: #ffc107; /* yellow highlight */
-  text-decoration: none;
-  font-weight: 800;
+/* ============================= */
+/* Tablet view */
+/* ============================= */
+@media (max-width: 992px) {
+  .banner-img {
+    height: 40vh;      /* ✅ fills 40% of viewport height */
+    max-height: none;  
+  }
+
+  .banner-overlay {
+    width: 220px;      
+    height: 70px;      
+  }
 }
 
-.banner-overlay a:hover {
-  text-decoration: underline;
+/* ============================= */
+/* Mobile view */
+/* ============================= */
+@media (max-width: 576px) {
+  .banner-img {
+    height: 50vh;      /* ✅ fills 50% of viewport height */
+    max-height: none;  
+  }
+
+  .banner-overlay {
+    width: 250px;      
+    height: 90px;      
+    top: 50%;          
+    left: 85%;         
+    border-radius: 0;  /* ✅ remove rounded corners on mobile */
+  }
 }

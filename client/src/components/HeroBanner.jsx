@@ -8,10 +8,8 @@ function HeroBanner() {
         alt="Promo Banner"
         className="banner-img"
       />
-      {/* ✅ Overlay shifted to the right */}
-      <div className="banner-overlay">
-        📞 <a href="tel:08068199955">08068199955</a>
-      </div>
+      {/* ✅ Black patch overlay to hide Jumia’s number */}
+      <div className="banner-overlay"></div>
     </div>
   );
 }
