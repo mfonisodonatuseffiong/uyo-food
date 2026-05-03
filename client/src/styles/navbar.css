@@ -3,7 +3,7 @@
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 9999;
+  z-index: 9999; /* navbar stays on top */
   transition: 0.3s ease;
   box-shadow: var(--shadow);
   backdrop-filter: blur(10px);
@@ -38,7 +38,6 @@
   transition: 0.3s ease;
 }
 
-/* hover effect */
 .navbar-brand.brand:hover {
   transform: scale(1.05);
   text-shadow: 0 4px 12px rgba(220, 53, 69, 0.25);
@@ -98,7 +97,7 @@
   font-weight: 600;
 }
 
-/* ================= CART ================= */
+/* ================= CART (legacy inline) ================= */
 .cart {
   position: relative;
   cursor: pointer;
@@ -122,10 +121,7 @@
   100% { transform: scale(1); }
 }
 
-.bounce {
-  animation: bounce 0.6s ease;
-}
-
+.bounce,
 .cart-bounce {
   animation: bounce 0.6s ease;
 }
@@ -149,15 +145,14 @@
 
 /* ================= MOBILE COLLAPSE (MODERN GLASS MENU) ================= */
 @media (max-width: 991px) {
-
   .navbar-collapse {
+    position: relative;
     background: rgba(255, 255, 255, 0.75);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
 
     margin-top: 12px;
     padding: 1rem;
-
     border-radius: 16px;
 
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
@@ -167,17 +162,80 @@
 
   .navbar-nav {
     gap: 10px;
+    flex-direction: column;
   }
 
   .nav-link {
     padding: 10px 12px;
     border-radius: 10px;
+    font-weight: 600;
     transition: 0.2s ease;
   }
 
   .nav-link:hover {
     background: rgba(220, 53, 69, 0.1);
+    color: var(--uyo-red);
   }
+
+  /* Close button */
+  .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    filter: invert(1);
+    opacity: 0.7;
+    transition: 0.2s ease;
+  }
+
+  .btn-close:hover {
+    opacity: 1;
+    transform: rotate(90deg);
+  }
+}
+
+/* ================= FLOATING CART (GLOBAL, FIXED) ================= */
+.floating-cart {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 500; /* lower than navbar so it never blocks links */
+
+  background: rgba(255, 255, 255, 0.25); /* transparent glass */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  border-radius: 999px;
+  padding: 12px 18px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #dc3545;
+
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  pointer-events: auto; /* only cart itself is clickable */
+}
+
+.floating-cart:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+}
+
+.floating-cart .badge {
+  background: #dc3545;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  position: absolute;
+  top: -6px;
+  right: -6px;
 }
 
 /* ================= ANIMATION ================= */
