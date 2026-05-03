@@ -26,12 +26,12 @@
 }
 
 /* ============================= */
-/* Tablet view */
+/* TABLET FIXES */
 /* ============================= */
 @media (max-width: 992px) {
   .banner-img {
-    height: 40vh;      /* ✅ fills 40% of viewport height */
-    max-height: none;  
+    height: 320px;     /* ✅ force taller height on tablets */
+    max-height: none;  /* ✅ override max-height */
   }
 
   .banner-overlay {
@@ -41,19 +41,18 @@
 }
 
 /* ============================= */
-/* Mobile view */
+/* MOBILE FIXES */
 /* ============================= */
 @media (max-width: 576px) {
   .banner-img {
-    height: 50vh;      /* ✅ fills 50% of viewport height */
-    max-height: none;  
+    height: 60px;     /* ✅ force much taller height on mobile */
+    max-height: none;  /* ✅ override max-height */
   }
 
   .banner-overlay {
-    width: 250px;      
-    height: 90px;      
-    top: 50%;          
-    left: 85%;         
-    border-radius: 0;  /* ✅ remove rounded corners on mobile */
+    width: 200px;      
+    height: 0.5px;      
+    top: 1%;          
+    left: 95%;         
   }
 }
