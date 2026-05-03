@@ -86,7 +86,7 @@ section {
 }
 
 /* =============================
-   5. GLOBAL BUTTONS (SAFE)
+   5. GLOBAL BUTTONS
 ============================= */
 .btn-premium {
   background: linear-gradient(90deg, #dc3545, #ff8c32);
@@ -103,8 +103,7 @@ section {
 }
 
 /* =============================
-   6. GLOBAL CARD (SAFE OVERRIDE)
-   (DO NOT BREAK BOOTSTRAP)
+   6. GLOBAL CARD
 ============================= */
 .app-card {
   border-radius: var(--radius-md);
@@ -120,7 +119,7 @@ section {
 }
 
 /* =============================
-   7. RESTAURANT CARD (UBER EATS STYLE)
+   7. RESTAURANT CARD
 ============================= */
 .restaurant-card {
   border-radius: 18px;
@@ -138,14 +137,12 @@ section {
   box-shadow: var(--shadow-lg);
 }
 
-/* Image wrapper */
 .food-thumbnail {
   height: 220px;
   overflow: hidden;
   position: relative;
 }
 
-/* Overlay hover */
 .overlay {
   position: absolute;
   inset: 0;
@@ -163,7 +160,7 @@ section {
 }
 
 /* =============================
-   8. SECTION HEADERS (GLOBAL)
+   8. SECTION HEADERS
 ============================= */
 .section-header {
   text-align: center;
@@ -201,18 +198,7 @@ section {
 }
 
 /* =============================
-   10. NAVBAR (KEEP YOUR STYLE)
-============================= */
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 9999;
-  background: var(--bg);
-}
-
-/* =============================
-   11. FOOTER
+   10. FOOTER
 ============================= */
 footer {
   background: var(--uyo-green);
@@ -226,12 +212,13 @@ footer a {
 }
 
 /* =============================
-   12. UTILITIES
+   11. UTILITIES
 ============================= */
 .text-gradient {
   background: linear-gradient(90deg, #dc3545, #ff9800);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  color: transparent; /* ✅ ensure gradient shows */
 }
 
 .line-clamp-2 {
@@ -241,180 +228,11 @@ footer a {
   -webkit-box-orient: vertical;
 }
 
-/* ========================= */
-/* SEARCH BY FOOD (Uber Eats Style)
-/* ========================= */
-
-.search-food-section {
-  background: #fff8e1;
-  padding: 4rem 1.5rem;
-}
-
-.search-food-header {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.search-title {
-  font-size: clamp(1.8rem, 3vw, 2.4rem);
-  font-weight: 800;
-  color: var(--uyo-red);
-  position: relative;
-  display: inline-block;
-}
-
-.search-title-line {
-  display: block;
-  width: 70px;
-  height: 4px;
-  margin: 0.5rem auto 0;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #dc3545, #ffc107);
-  animation: pulseUnderline 2s infinite;
-}
-
-.search-subtitle {
-  color: #555;
-  max-width: 600px;
-  margin: 0.8rem auto;
-  font-size: 1rem;
-}
-
-/* SEARCH BAR */
-.search-bar-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  max-width: 700px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 0.6rem;
-  border-radius: 50px;
-  box-shadow: var(--shadow);
-}
-
-.search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 0.6rem 1rem;
-  font-weight: 600;
-  background: transparent;
-}
-
-.search-btn {
-  background: linear-gradient(90deg, #dc3545, #ff8c32);
-  color: #fff;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 50px;
-  font-weight: 700;
-  transition: 0.3s;
-}
-
-.search-btn:hover {
-  transform: translateY(-2px);
-}
-
-/* SUGGESTIONS */
-.suggestions-box {
-  position: absolute;
-  top: 110%;
-  width: 100%;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: var(--shadow-lg);
-  z-index: 20;
-  overflow: hidden;
-}
-
-.suggestions-box li {
-  padding: 0.8rem 1rem;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.suggestions-box li:hover {
-  background: #fff3f4;
-}
-
-.no-result {
-  padding: 1rem;
-  color: #777;
-}
-
-/* FOOD CARD */
-.food-card {
-  background: #fff;
-  border-radius: 18px;
-  text-align: center;
-  padding: 1rem;
-  box-shadow: var(--shadow);
-  transition: 0.3s;
-  cursor: pointer;
-}
-
-.food-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-lg);
-}
-
-.food-img-wrapper {
-  width: 110px;
-  height: 110px;
-  margin: 0 auto 0.8rem;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.food-img-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.food-name {
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.quick-order-btn {
-  background: var(--uyo-red);
-  color: #fff;
-  border: none;
-  padding: 0.4rem 0.9rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-
-/* ANIMATION */
+/* =============================
+   12. ANIMATIONS
+============================= */
 @keyframes pulseUnderline {
   0% { transform: scaleX(0.8); opacity: 0.6; }
   50% { transform: scaleX(1); opacity: 1; }
   100% { transform: scaleX(0.8); opacity: 0.6; }
-}
-
-/* Default navbar */
-.premium-navbar {
-  background: var(--bg) !important;
-  min-height: 64px;
-  padding: .65rem 1rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,.08);
-  transition: all .3s ease;
-}
-
-/* Scrolled state */
-.navbar-scrolled {
-  background: #fff !important; /* or a darker shade for contrast */
-  padding: .45rem 1rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,.12);
-}
-
-.navbar-scrolled {
-  background: linear-gradient(90deg, var(--uyo-red), var(--uyo-yellow)) !important;
-  padding: .45rem 1rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,.15);
 }

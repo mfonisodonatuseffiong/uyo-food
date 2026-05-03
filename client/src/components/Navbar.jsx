@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import restaurants from "../data/restaurants";
+import "../styles/navbar.css";
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -119,21 +120,11 @@ function Navbar() {
       <div className="container-fluid">
 
         {/* Brand */}
-        <a
-          className="navbar-brand fw-bold d-flex align-items-center gap-2"
-          href="/"
-          style={{
-            fontSize: "1.5rem",
-            letterSpacing: "0.5px",
-            background: "linear-gradient(90deg, #dc3545, #ffc107)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            textShadow: "0 2px 8px rgba(0,0,0,0.15)",
-          }}
-        >
-          <i className="fas fa-utensils text-danger fs-4"></i>
-          Uyo Food
-        </a>
+<a className="navbar-brand brand d-flex align-items-center gap-2" href="/">
+  <i className="fas fa-utensils text-danger fs-4"></i>
+  Uyo Food
+</a>
+
 
         {/* Toggle */}
         <button
