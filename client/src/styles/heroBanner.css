@@ -45,7 +45,7 @@
 /* ============================= */
 @media (max-width: 576px) {
   .banner-img {
-    height: 60px;     /* ✅ force much taller height on mobile */
+    height: 41px;     /* ✅ force much taller height on mobile */
     max-height: none;  /* ✅ override max-height */
   }
 
