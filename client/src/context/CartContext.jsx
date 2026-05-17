@@ -3,17 +3,13 @@ import { createContext, useContext, useReducer, useState, useEffect } from "reac
 const CartContext = createContext();
 
 /* =========================
-   CART REDUCER (FIXED)
+   CART REDUCER
 ========================= */
 const cartReducer = (state, action) => {
   switch (action.type) {
-
     case "ADD_ITEM": {
       const item = action.payload;
-
-      const existingIndex = state.findIndex(
-        (i) => i.id === item.id
-      );
+      const existingIndex = state.findIndex((i) => i.id === item.id);
 
       if (existingIndex !== -1) {
         const updated = [...state];
@@ -27,12 +23,20 @@ const cartReducer = (state, action) => {
     case "REMOVE_ITEM":
       return state.filter((item) => item.id !== action.payload);
 
-    case "DECREASE_ITEM": {
+    case "DECREASE_ITEM":
       return state
         .map((item) =>
           item.id === action.payload
             ? { ...item, quantity: item.quantity - 1 }
             : item
+        )
+        .filter((item) => item.quantity > 0);
+
+    case "UPDATE_QUANTITY": {
+      const { id, newQuantity } = action.payload;
+      return state
+        .map((item) =>
+          item.id === id ? { ...item, quantity: newQuantity } : item
         )
         .filter((item) => item.quantity > 0);
     }
@@ -49,7 +53,6 @@ const cartReducer = (state, action) => {
    PROVIDER
 ========================= */
 export const CartProvider = ({ children }) => {
-
   const [cart, dispatch] = useReducer(
     cartReducer,
     [],
@@ -75,16 +78,10 @@ export const CartProvider = ({ children }) => {
   /* notifications */
   const showNotification = (message, type = "info") => {
     const id = Date.now();
-
-    setNotifications((prev) => [
-      ...prev,
-      { id, message, type },
-    ]);
+    setNotifications((prev) => [...prev, { id, message, type }]);
 
     setTimeout(() => {
-      setNotifications((prev) =>
-        prev.filter((n) => n.id !== id)
-      );
+      setNotifications((prev) => prev.filter((n) => n.id !== id));
     }, 3000);
   };
 
@@ -99,8 +96,7 @@ export const CartProvider = ({ children }) => {
         price: item.price,
       },
     });
-
-    showNotification("Item added to cart", "success");
+    // ✅ Removed automatic green "Item added" notification
   };
 
   const removeItem = (id) => {
@@ -112,15 +108,17 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: "DECREASE_ITEM", payload: id });
   };
 
+  const updateQuantity = (id, newQuantity) => {
+    dispatch({ type: "UPDATE_QUANTITY", payload: { id, newQuantity } });
+  };
+
   const clearCart = () => {
     dispatch({ type: "CLEAR_CART" });
     showNotification("Cart cleared", "info");
   };
 
   const dismissNotification = (id) => {
-    setNotifications((prev) =>
-      prev.filter((n) => n.id !== id)
-    );
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
   };
 
   return (
@@ -130,6 +128,7 @@ export const CartProvider = ({ children }) => {
         addItem,
         removeItem,
         decreaseItem,
+        updateQuantity,   // 👈 now available to CartPage
         clearCart,
         notifications,
         showNotification,

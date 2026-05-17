@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";   // ← This was missing!
+import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 function SearchBar() {
@@ -11,7 +11,7 @@ function SearchBar() {
   const navigate = useNavigate();
   const searchRef = useRef(null);
 
-  // Popular search suggestions (You can later connect this to real data)
+  // later to be connected to real data)
   const popularSearches = [
     "Afang Soup",
     "Jollof Rice",

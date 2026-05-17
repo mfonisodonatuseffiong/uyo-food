@@ -1,0 +1,370 @@
+/* =============================
+   ORDER TYPE MODAL — UYO FOOD
+   Palette: deep green + red accent.
+   Tokens from index.css.
+   All selectors scoped to .om__*
+   — zero global overrides.
+============================= */
+
+/* ── Overlay ── */
+.om__overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.52);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+  animation: omOverlayIn 0.2s ease;
+}
+
+@keyframes omOverlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Modal box ── */
+.om__box {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: omBoxIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes omBoxIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* ── Header ── */
+.om__header {
+  background: var(--uyo-green);
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.om__title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 0.2rem;
+}
+
+.om__subtitle {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+}
+
+.om__close {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.om__close:hover { background: rgba(255, 255, 255, 0.28); }
+.om__close:focus-visible { outline: 3px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+
+/* ── Fields ── */
+.om__field {
+  padding: 1rem 1.4rem 0;
+}
+
+.om__label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+.om__label i { color: var(--uyo-green); }
+
+/* ── Dropdown ── */
+.om__dropdown-wrap {
+  position: relative;
+}
+
+.om__input {
+  width: 100%;
+  padding: 0.65rem 2.5rem 0.65rem 0.9rem;
+  border: 1.5px solid #ddd;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  font-family: var(--font-main);
+  color: var(--text-dark);
+  background: #fafafa;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.om__input:focus { border-color: var(--uyo-green); background: #fff; }
+
+.om__dropdown-arrow {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #999;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+.om__dropdown-arrow.open { transform: translateY(-50%) rotate(180deg); }
+
+.om__dropdown-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 100;
+  max-height: 200px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1.5px solid #e0e0e0;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  animation: dropdownIn 0.18s ease;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.om__dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.9rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s ease;
+  gap: 8px;
+}
+.om__dropdown-item:hover { background: #f5f9f5; }
+.om__dropdown-item.active { background: #f0f9f0; }
+
+.om__item-name { font-weight: 600; color: var(--text-dark); }
+
+.om__item-status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.om__item-status.open   { background: rgba(0,100,0,0.1); color: var(--uyo-green); }
+.om__item-status.closed { background: #f5f5f5; color: #aaa; }
+
+/* Scrollbar */
+.om__dropdown-list::-webkit-scrollbar { width: 5px; }
+.om__dropdown-list::-webkit-scrollbar-track { background: #f9f9f9; }
+.om__dropdown-list::-webkit-scrollbar-thumb { background: var(--uyo-green); border-radius: 4px; }
+
+/* ── Order type toggle ── */
+.om__toggle-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 0.5rem;
+}
+
+.om__toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-md);
+  border: 2px solid #e0e0e0;
+  background: #fafafa;
+  color: #888;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+}
+.om__toggle-btn:hover {
+  border-color: var(--uyo-green);
+  color: var(--uyo-green);
+  background: #f0f9f0;
+}
+.om__toggle-btn.active {
+  background: var(--uyo-green);
+  border-color: var(--uyo-green);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,100,0,0.22);
+}
+.om__toggle-btn:focus-visible { outline: 3px solid var(--uyo-green); outline-offset: 2px; }
+
+/* ── Selected restaurant preview card ── */
+.om__preview {
+  margin: 0.75rem 1.4rem 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f0f9f0;
+  border: 1.5px solid #c8e6c8;
+  border-radius: var(--radius-md);
+  padding: 0.75rem;
+}
+
+.om__preview-img {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.om__preview-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.om__preview-name {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--uyo-green);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.om__preview-detail {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.72rem;
+  color: #888;
+  margin-top: 2px;
+}
+.om__preview-detail i { color: var(--uyo-green); }
+
+.om__preview-status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 99px;
+  flex-shrink: 0;
+}
+.om__preview-status.open   { background: rgba(0,100,0,0.1); color: var(--uyo-green); }
+.om__preview-status.closed { background: #f5f5f5; color: #aaa; }
+
+/* ── Actions ── */
+.om__actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.2rem 1.4rem 1.4rem;
+  margin-top: 0.5rem;
+}
+
+.om__cancel-btn {
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid #ddd;
+  background: #fff;
+  color: #777;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+}
+.om__cancel-btn:hover { background: #f5f5f5; }
+
+.om__confirm-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0.65rem 1.4rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--uyo-red);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+  box-shadow: 0 4px 14px rgba(220,53,69,0.25);
+}
+.om__confirm-btn:hover:not(:disabled) {
+  background: #c93512;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(220,53,69,0.35);
+}
+.om__confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+.om__confirm-btn:focus-visible { outline: 3px solid var(--uyo-red); outline-offset: 2px; }
+
+/* ── Spinner ── */
+.om__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: omSpin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+@keyframes omSpin { to { transform: rotate(360deg); } }
+
+/* ── Progress bar ── */
+.om__progress-bar {
+  height: 4px;
+  background: #eee;
+  overflow: hidden;
+}
+.om__progress-fill {
+  height: 100%;
+  background: var(--uyo-green);
+  animation: omProgress 1s linear forwards;
+}
+@keyframes omProgress {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .om__box, .om__overlay, .om__dropdown-list { animation: none; }
+  .om__spinner { animation: none; border-color: #fff; }
+  .om__progress-fill { animation: none; width: 50%; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 520px) {
+  .om__box { border-radius: var(--radius-md); }
+  .om__actions { flex-direction: column; }
+  .om__cancel-btn { width: 100%; text-align: center; }
+}

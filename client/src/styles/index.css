@@ -1,0 +1,65 @@
+/* =============================
+   DESIGN TOKENS
+   Single source of truth for all
+   colors, spacing, shadows, etc.
+   All other CSS files reference
+   these variables — never redefine
+   them elsewhere.
+============================= */
+:root {
+  /* Brand colors */
+  --uyo-green:  #006400;
+  --uyo-yellow: #FFB30E;
+  --uyo-red:    #dc3545;
+
+  /* Text */
+  --text:       #333;
+  --text-dark:  #08060d;
+
+  /* Backgrounds & borders */
+  --bg:         #fff;
+  --border:     #e5e4e7;
+
+  /* Shadows */
+  --shadow-sm:  0 2px 10px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 8px 28px rgba(0, 0, 0, 0.12);
+  --shadow-lg:  0 16px 32px rgba(0, 0, 0, 0.14);
+
+  /* Border radius */
+  --radius-sm:  8px;
+  --radius-md:  12px;
+  --radius-lg:  18px;
+
+  /* Transitions */
+  --transition: all 0.3s ease;
+
+  /* Typography */
+  --font-main:  "DM Sans", "Segoe UI", Arial, sans-serif;
+}
+
+/* =============================
+   BASE RESET
+============================= */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--text);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}

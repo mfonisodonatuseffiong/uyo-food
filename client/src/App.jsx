@@ -1,184 +1,200 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { lazy, Suspense, useEffect } from "react";
 import { CartProvider, useCart } from "./context/CartContext";
 
-// Layout
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
+// ── Always-on layout components (not lazy — needed immediately) ──────────────
+import Navbar           from "./components/Navbar";
+import FloatingCart     from "./components/FloatingCart";
 import NotificationStack from "./components/Notification";
 
-// Home sections
-import HeroBanner from "./components/HeroBanner";   // ✅ NEW IMPORT
-import HeroSection from "./components/HeroSection";
-import SearchBar from "./components/SearchBar";
-import Categories from "./components/Categories";
-import LocalFavourite from "./components/LocalFavourite";
-import DiscountItems from "./components/DiscountItems";
-import HowItWorks from "./components/HowItWorks";
-import PopularItems from "./components/PopularItems";
-import FeaturedRestaurants from "./components/FeaturedRestaurants";
-import SearchByFood from "./components/SearchByFood";
-import OrderCTA from "./components/OrderCTA";
-import TestimonialsPage from "./pages/TestimonialsPage";
-import WhyChooseUs from "./components/WhyChooseUs";
-import Contact from "./components/Contact";
+// ── Lazy-loaded pages (code splitting — each page loads only when visited) ───
+const HomePage            = lazy(() => import("./pages/HomePage"));
+const Restaurants         = lazy(() => import("./pages/Restaurants"));
+const RestaurantDetail    = lazy(() => import("./pages/RestaurantDetail"));
+const CartPage            = lazy(() => import("./pages/CartPage"));
+const CheckoutPage        = lazy(() => import("./pages/CheckoutPage"));
+const ConfirmationPage    = lazy(() => import("./pages/ConfirmationPage"));
+const TrackingPage        = lazy(() => import("./pages/TrackingPage"));
+const OrderDetails        = lazy(() => import("./pages/OrderDetails"));
+const FAQPage             = lazy(() => import("./pages/FAQPage"));
+const GalleryPage         = lazy(() => import("./pages/GalleryPage"));
+const Blog                = lazy(() => import("./pages/Blog"));
+const About               = lazy(() => import("./pages/About"));
+const Team                = lazy(() => import("./pages/Team"));
+const Careers             = lazy(() => import("./pages/Careers"));
+const HelpSupport         = lazy(() => import("./pages/HelpSupport"));
+const PartnerWithUs       = lazy(() => import("./pages/PartnerWithUs"));
+const DeliverWithUyoFood  = lazy(() => import("./pages/DeliverWithUyoFood"));
+const Contact             = lazy(() => import("./components/Contact"));
 
-// Pages
-import DownloadPage from "./pages/DownloadPage";
-import DealsPage from "./pages/DealsPage";
-import Spotlight from "./pages/Spotlight";
-import LocalDishes from "./pages/LocalDishes";
-import FAQPage from "./pages/FAQPage";
-import GalleryPage from "./pages/GalleryPage";
-import Blog from "./pages/Blog";
-import About from "./pages/About";
-import Team from "./pages/Team";
-import Careers from "./pages/Careers";
-import HelpSupport from "./pages/HelpSupport";
-import PartnerWithUs from "./pages/PartnerWithUs";
-import DeliverWithUyoFood from "./pages/DeliverWithUyoFood";
-import Restaurants from "./pages/Restaurants";
-import RestaurantDetail from "./pages/RestaurantDetail";
+// ── Components used as standalone pages ──────────────────────────────────────
+const LocalDishes    = lazy(() => import("./components/LocalDishes"));
+const DealsSpotlight = lazy(() => import("./components/DealsSpotlight"));
 
-// Order flow
-import CartPage from "./pages/CartPage";
-import CheckoutPage from "./pages/CheckoutPage";
-import TrackingPage from "./pages/TrackingPage";
-import OrderDetails from "./pages/OrderDetails";
-import ConfirmationPage from "./pages/ConfirmationPage";
-
-// Data + Swiper
-import restaurants from "./data/restaurants";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay, EffectFade } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/effect-fade";
-
-/* =========================
-   404
-========================= */
-function NotFound() {
+/* ─────────────────────────────────────────────
+   PAGE LOADER
+   Shown while a lazy page is loading
+───────────────────────────────────────────── */
+function PageLoader() {
   return (
-    <div className="text-center py-5">
-      <h1 className="fw-bold text-danger">404</h1>
-      <p className="lead">Page Not Found</p>
-      <a href="/" className="btn btn-warning rounded-pill px-4 fw-bold">
-        Back to Home
-      </a>
+    <div
+      style={{
+        minHeight: "60vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        gap: "1rem",
+      }}
+      role="status"
+      aria-label="Loading page"
+    >
+      <div
+        style={{
+          width: 44,
+          height: 44,
+          border: "4px solid #e8f5e8",
+          borderTop: "4px solid #006400",
+          borderRadius: "50%",
+          animation: "spin 0.8s linear infinite",
+        }}
+        aria-hidden="true"
+      ></div>
+      <p style={{ color: "#888", fontSize: "0.9rem", margin: 0 }}>
+        Loading…
+      </p>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
     </div>
   );
 }
 
-/* =========================
-   HOME
-========================= */
-function HomePage() {
+/* ─────────────────────────────────────────────
+   404 PAGE
+───────────────────────────────────────────── */
+function NotFound() {
   return (
-    <>
-      <Navbar />
-
-      {/* ✅ Banner directly under navbar */}
-      <HeroBanner />
-
-      <HeroSection />
-
-      <div className="container my-4">
-        <SearchBar />
-        <Categories />
-      </div>
-
-      <LocalFavourite />
-      <DiscountItems />
-      <HowItWorks />
-      <PopularItems />
-      <FeaturedRestaurants />
-      <SearchByFood />
-
-      <DownloadPage />
-      <DealsPage />
-
-      {/* Spotlight */}
-      <section className="py-5 bg-light">
-        <div className="container">
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay, EffectFade]}
-            spaceBetween={30}
-            slidesPerView={1}
-            navigation
-            pagination={{ clickable: true }}
-            autoplay={{ delay: 4000 }}
-            loop
-            effect="fade"
-          >
-            {restaurants.map((r, idx) => (
-              <SwiperSlide key={idx}>
-                <Spotlight {...r} />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </section>
-
-      <LocalDishes />
-      <OrderCTA />
-      <TestimonialsPage />
-      <WhyChooseUs />
-      <Contact />
-      <Footer />
-    </>
+    <main
+      className="text-center py-5"
+      style={{ minHeight: "70vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem" }}
+      aria-labelledby="not-found-heading"
+    >
+      <h1
+        id="not-found-heading"
+        style={{ fontSize: "5rem", fontWeight: 900, color: "#006400", margin: 0, lineHeight: 1 }}
+      >
+        404
+      </h1>
+      <p style={{ fontSize: "1.2rem", color: "#555", margin: 0 }}>
+        Hmm, this page doesn't exist.
+      </p>
+      <p style={{ color: "#aaa", fontSize: "0.9rem", margin: 0 }}>
+        The page may have moved or the link is broken.
+      </p>
+      {/* FIX: Link not <a href> — no full page reload */}
+      <a
+        href="/"
+        style={{
+          marginTop: "0.5rem",
+          background: "#006400",
+          color: "#fff",
+          padding: "0.75rem 2rem",
+          borderRadius: "50px",
+          fontWeight: 700,
+          textDecoration: "none",
+          fontSize: "0.95rem",
+        }}
+      >
+        Back to Home
+      </a>
+    </main>
   );
 }
 
-/* =========================
+/* ─────────────────────────────────────────────
+   SCROLL TO TOP ON ROUTE CHANGE
+   Industry standard — page always starts
+   at the top when navigating to a new route
+───────────────────────────────────────────── */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+  return null;
+}
+
+/* ─────────────────────────────────────────────
    APP CONTENT
-========================= */
+   Separated so it can consume CartContext
+───────────────────────────────────────────── */
 function AppContent() {
   const { notifications, dismissNotification } = useCart();
 
   return (
     <>
+      {/* Scroll to top on every route change */}
+      <ScrollToTop />
+
+      {/* Always-visible layout */}
+      <Navbar />
+      <FloatingCart />
       <NotificationStack
         notifications={notifications}
         onDismiss={dismissNotification}
       />
 
-      <Routes>
-        <Route path="/" element={<HomePage />} />
+      {/* Route content — wrapped in Suspense for lazy loading */}
+      <Suspense fallback={<PageLoader />}>
+        <Routes>
 
-        <Route path="/restaurants" element={<Restaurants />} />
-        <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+          {/* ── Home ── */}
+          <Route path="/"          element={<HomePage />} />
 
-        {/* Order Flow */}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/confirmation" element={<ConfirmationPage />} />
-        <Route path="/tracking" element={<TrackingPage />} />
-        <Route path="/order/:orderId" element={<OrderDetails />} />
+          {/* ── Restaurants ── */}
+          <Route path="/restaurants"       element={<Restaurants />} />
+          <Route path="/restaurant/:id"    element={<RestaurantDetail />} />
 
-        {/* Pages */}
-        <Route path="/local-dishes" element={<LocalDishes />} />
-        <Route path="/faq" element={<FAQPage />} />
-        <Route path="/gallery" element={<GalleryPage />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/team" element={<Team />} />
-        <Route path="/careers" element={<Careers />} />
-        <Route path="/help-support" element={<HelpSupport />} />
-        <Route path="/partner" element={<PartnerWithUs />} />
-        <Route path="/deliver" element={<DeliverWithUyoFood />} />
-        <Route path="/contact" element={<Contact />} />
+          {/* ── Order flow ── */}
+          <Route path="/cart"              element={<CartPage />} />
+          <Route path="/checkout"          element={<CheckoutPage />} />
+          <Route path="/confirmation"      element={<ConfirmationPage />} />
+          <Route path="/tracking"          element={<TrackingPage />} />
+          <Route path="/order/:orderId"    element={<OrderDetails />} />
 
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {/* ── Discover ── */}
+          <Route path="/local-dishes"      element={<LocalDishes />} />
+          <Route path="/deals"             element={<DealsSpotlight />} />
+          <Route path="/gallery"           element={<GalleryPage />} />
+          <Route path="/blog"              element={<Blog />} />
+
+          {/* ── Info & support ── */}
+          <Route path="/faq"               element={<FAQPage />} />
+          <Route path="/about"             element={<About />} />
+          <Route path="/team"              element={<Team />} />
+          <Route path="/careers"           element={<Careers />} />
+          <Route path="/help-support"      element={<HelpSupport />} />
+          <Route path="/contact"           element={<Contact />} />
+
+          {/* ── Partners ── */}
+          <Route path="/partner"           element={<PartnerWithUs />} />
+          <Route path="/deliver"           element={<DeliverWithUyoFood />} />
+
+          {/* ── 404 — must be last ── */}
+          <Route path="*"                  element={<NotFound />} />
+
+        </Routes>
+      </Suspense>
     </>
   );
 }
 
-/* =========================
-   APP WRAPPER
-========================= */
+/* ─────────────────────────────────────────────
+   APP ROOT
+───────────────────────────────────────────── */
 export default function App() {
   return (
     <CartProvider>

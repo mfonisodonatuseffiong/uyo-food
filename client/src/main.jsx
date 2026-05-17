@@ -13,7 +13,8 @@ import "animate.css";
 import "aos/dist/aos.css";
 
 /* Your merged global stylesheet */
-import "./index.css";
+import "./styles/index.css";
+import "./styles/utilities.css";
 
 import AOS from "aos";
 

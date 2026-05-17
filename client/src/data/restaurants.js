@@ -31,6 +31,7 @@ const restaurants = [
     baseDeliveryTime: 25,
 
     link: "/order/esandidia",
+    address: "8 Ikot Udoro Street Off Ikot Ekpene road, Uyo. Akwa Ibom State",
 
     menu: [
       { id: "m1", name: "Ekpang Nkwukwo", price: 2500 },
@@ -60,6 +61,7 @@ const restaurants = [
     baseDeliveryTime: 30,
 
     link: "/order/afedndia",
+    address: "238 Aka Etinan road, Uyo. Akwa Ibom State",
 
     menu: [
       { id: "m1", name: "Coconut Rice", price: 2200 },

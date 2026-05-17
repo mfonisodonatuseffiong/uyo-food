@@ -1,126 +1,190 @@
-import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import orderImg    from "../assets/images/gallery/order.png";
 import locationImg from "../assets/images/gallery/location.png";
-import orderImg from "../assets/images/gallery/order.png";
-import payImg from "../assets/images/gallery/pay.png";
-import mealsImg from "../assets/images/gallery/meals.png";
+import payImg      from "../assets/images/gallery/pay.png";
+import mealsImg    from "../assets/images/gallery/meals.png";
 import "../styles/howItWorks.css";
 
-export default function HowItWorks() {
-  const navigate = useNavigate();
+// ── Static data outside component — never recreated on render ────────────────
+const STEPS = [
+  {
+    img:   orderImg,
+    alt:   "A bowl of local Nigerian food on a restaurant menu",
+    title: "Choose Your Dish",
+    text:  "Browse authentic Uyo restaurant menus and pick your favourite local meal.",
+    icon:  "fas fa-utensils",
+  },
+  {
+    img:   locationImg,
+    alt:   "A map pin showing a delivery address in Uyo",
+    title: "Set Your Location",
+    text:  "Tell us exactly where in Uyo you want your food delivered.",
+    icon:  "fas fa-map-marker-alt",
+  },
+  {
+    img:   payImg,
+    alt:   "A secure payment screen on a mobile phone",
+    title: "Pay Securely",
+    text:  "Complete your order with safe, trusted payment options.",
+    icon:  "fas fa-lock",
+  },
+  {
+    img:   mealsImg,
+    alt:   "Hot food being delivered to a doorstep",
+    title: "Enjoy Your Meal",
+    text:  "Sit back — hot, fresh food arrives straight to your doorstep.",
+    icon:  "fas fa-heart",
+  },
+];
 
-  const steps = [
-    {
-      img: orderImg,
-      title: "Choose Your Dish",
-      text: "Browse authentic menus and pick your favourite local meal.",
-    },
-    {
-      img: locationImg,
-      title: "Select Location",
-      text: "Tell us where in Uyo you’d like your food delivered.",
-    },
-    {
-      img: payImg,
-      title: "Secure Payment",
-      text: "Pay easily with safe and trusted payment options.",
-    },
-    {
-      img: mealsImg,
-      title: "Enjoy Your Meal",
-      text: "Sit back and enjoy hot, fresh food delivered to your doorstep.",
-    },
-  ];
+export default function HowItWorks() {
+  const navigate   = useNavigate();
+  const sectionRef = useRef(null);
+
+  // ── CSS-only scroll animation via IntersectionObserver ───────────────────
+  // No Framer Motion — saves ~30KB on slow Nigerian mobile connections
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const targets = section.querySelectorAll(".hiw__animate");
+
+    // Respect reduced motion preference
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReduced) {
+      targets.forEach((el) => el.classList.add("hiw__visible"));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("hiw__visible");
+            // Animate once — unobserve after triggering
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <section className="how-section py-5" id="how-it-works">
-      <div className="container">
-        <div className="row justify-content-center g-0">
-          <div className="col-xl-9">
+    <section
+      className="hiw"
+      id="how-it-works"
+      aria-labelledby="hiw-heading"
+      ref={sectionRef}
+    >
+      <div className="hiw__inner">
 
-            {/* HEADER */}
-            <div className="how-header text-center mx-auto">
-              <motion.h2
-                className="how-title fw-bold"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                How Uyo-Food Works
-              </motion.h2>
-
-              <span className="how-underline"></span>
-
-              <p className="how-subtitle mt-3">
-                Simple steps to get your favourite dishes delivered fast.
-              </p>
-            </div>
-
-            {/* STEPS */}
-            <div className="how-steps position-relative">
-
-              {/* dashed line */}
-              <div className="how-line"></div>
-
-              <div className="row position-relative">
-                {steps.map((step, index) => (
-                  <motion.div
-                    key={index}
-                    className="col-sm-6 col-md-3 mb-4"
-                    initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: index * 0.2 }}
-                    viewport={{ once: true }}
-                  >
-                    <div className="how-card text-center p-4 h-100">
-
-                      {/* number */}
-                      <span className="how-badge">
-                        {index + 1}
-                      </span>
-
-                      {/* image */}
-                      <img
-                        src={step.img}
-                        alt={step.title}
-                        className="how-icon mb-3"
-                      />
-
-                      <h5 className="fw-bold text-danger">
-                        {step.title}
-                      </h5>
-
-                      <p className="text-dark small">
-                        {step.text}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA */}
-            <div className="text-center mt-4">
-              <button
-                className="btn btn-danger rounded-pill fw-bold px-4 me-3 how-btn-primary"
-                onClick={() => navigate("/restaurants?type=delivery")}
-              >
-                <i className="fas fa-utensils me-2"></i>
-                Start Ordering
-              </button>
-
-              <button
-                className="btn btn-warning rounded-pill fw-bold px-4 how-btn-secondary"
-                onClick={() => navigate("/restaurants")}
-              >
-                <i className="fas fa-list me-2"></i>
-                Explore Restaurants
-              </button>
-            </div>
-
-          </div>
+        {/* ── Header ── */}
+        <div className="hiw__header hiw__animate">
+          <span className="hiw__eyebrow">Simple. Fast. Local.</span>
+          <h2 className="hiw__title" id="hiw-heading">
+            How Uyo Food Works
+          </h2>
+          <div className="hiw__underline" aria-hidden="true"></div>
+          <p className="hiw__subtitle">
+            From craving to doorstep in four easy steps.
+          </p>
         </div>
+
+        {/* ── Steps — semantic ordered list ── */}
+        <ol className="hiw__steps" aria-label="How to order in 4 steps">
+
+          {/* Connector line — rendered via CSS, not absolute positioning ── */}
+          <li
+            className="hiw__connector"
+            aria-hidden="true"
+          ></li>
+
+          {STEPS.map((step, i) => (
+            <li
+              key={step.title}
+              className="hiw__step hiw__animate"
+              style={{ "--delay": `${i * 0.15}s` }}
+              // FIX: aria-label communicates step number to screen readers
+              aria-label={`Step ${i + 1} of ${STEPS.length}: ${step.title}`}
+            >
+              <div className="hiw__card">
+                {/* Step number badge */}
+                <div className="hiw__badge" aria-hidden="true">
+                  {i + 1}
+                </div>
+
+                {/* Step image */}
+                <div className="hiw__img-wrap">
+                  <img
+                    src={step.img}
+                    alt={step.alt}
+                    className="hiw__img"
+                    width="90"
+                    height="90"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Icon accent */}
+                <div className="hiw__icon-accent" aria-hidden="true">
+                  <i className={step.icon}></i>
+                </div>
+
+                {/* Text */}
+                <h3 className="hiw__step-title">{step.title}</h3>
+                <p className="hiw__step-text">{step.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        {/* ── Progress bar hint ── */}
+        <div className="hiw__progress" aria-hidden="true">
+          {STEPS.map((step, i) => (
+            <div key={step.title} className="hiw__progress-step">
+              <div className="hiw__progress-dot">
+                <i className={step.icon}></i>
+              </div>
+              {i < STEPS.length - 1 && (
+                <div className="hiw__progress-line"></div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* ── CTA row ── */}
+        <div className="hiw__cta-row hiw__animate" style={{ "--delay": "0.6s" }}>
+          <Link
+            to="/restaurants?type=delivery"
+            className="hiw__cta-primary"
+          >
+            <i className="fas fa-bolt" aria-hidden="true"></i>
+            Start Ordering
+          </Link>
+
+          <Link
+            to="/restaurants"
+            className="hiw__cta-secondary"
+          >
+            <i className="fas fa-store" aria-hidden="true"></i>
+            Browse Restaurants
+          </Link>
+        </div>
+
+        {/* ── Trust note ── */}
+        <p className="hiw__trust hiw__animate" style={{ "--delay": "0.75s" }}>
+          <i className="fas fa-shield-alt" aria-hidden="true"></i>
+          Trusted by thousands of customers across Uyo, Akwa Ibom
+        </p>
+
       </div>
     </section>
   );

@@ -1,278 +1,458 @@
-import "../styles/Restaurants.css";
-import { motion } from "framer-motion";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { useEffect, useMemo, useState } from "react";
 import restaurants from "../data/restaurants";
-import Categories from "../components/Categories";
+import "../styles/Restaurants.css";
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function isOpen(r) {
+  if (!r.isOpen) return false;
+  try {
+    const now     = new Date();
+    const [oH,oM] = r.openingTime.split(":").map(Number);
+    const [cH,cM] = r.closingTime.split(":").map(Number);
+    const cur     = now.getHours() * 60 + now.getMinutes();
+    return cur >= oH * 60 + oM && cur < cH * 60 + cM;
+  } catch { return r.isOpen; }
+}
+
+function StarRating({ rating }) {
+  const full  = Math.floor(rating);
+  const half  = rating % 1 >= 0.5;
+  const empty = 5 - full - (half ? 1 : 0);
+  return (
+    <span className="rst__stars" aria-hidden="true">
+      {"★".repeat(full)}{half ? "½" : ""}{"☆".repeat(empty)}
+    </span>
+  );
+}
+
+// ── Skeleton card ─────────────────────────────────────────────────────────────
+function SkeletonCard() {
+  return (
+    <div className="rst__card rst__skeleton" aria-hidden="true">
+      <div className="rst__skeleton-img"></div>
+      <div className="rst__skeleton-body">
+        <div className="rst__skeleton-line rst__skeleton-line--title"></div>
+        <div className="rst__skeleton-line rst__skeleton-line--short"></div>
+        <div className="rst__skeleton-line rst__skeleton-line--long"></div>
+        <div className="rst__skeleton-line rst__skeleton-line--btn"></div>
+      </div>
+    </div>
+  );
+}
+
+// ── Filter + Sort constants ───────────────────────────────────────────────────
+const CATEGORIES = ["All", "Soups", "Grills", "Rice", "Snacks", "Drinks"];
+const SORT_OPTIONS = [
+  { value: "popular",  label: "Most Popular" },
+  { value: "rating",   label: "Top Rated"    },
+  { value: "fastest",  label: "Fastest"      },
+  { value: "open",     label: "Open Now"     },
+];
+
+// ── Main component ────────────────────────────────────────────────────────────
 export default function Restaurants() {
-  const { cart, addItem } = useCart();
-  const location = useLocation();
+  const { cart, addItem }           = useCart();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageRef                     = useRef(null);
 
-  const [address, setAddress] = useState("");
+  // ── State ──
+  const [loading,    setLoading]    = useState(true);
+  const [activeSort, setSort]       = useState("popular");
+  const [notification, setNote]     = useState(null);
+  const [addedMap,   setAddedMap]   = useState({}); // dish key → true for 1.5s
 
-  const params = new URLSearchParams(location.search);
-  const lat = parseFloat(params.get("lat"));
-  const lng = parseFloat(params.get("lng"));
-  const orderType = params.get("type") || "delivery";
+  // ── Read search + category from URL ──────────────────────────────────────
+  const urlSearch   = searchParams.get("search")   || "";
+  const urlCategory = searchParams.get("category") || "All";
 
-  const validCoords = !isNaN(lat) && !isNaN(lng);
-
-  // =========================
-  // OPEN STATUS (BACKEND READY PLACEHOLDER)
-  // =========================
-  const getOpenStatus = (restaurant) => {
-    const hour = new Date().getHours();
-
-    // backend will override this later
-    if (restaurant.supportsPickup === false) return false;
-
-    return hour >= 7 && hour <= 22;
-  };
-
-  // =========================
-  // GEO LOCATION
-  // =========================
+  // Simulate async load
   useEffect(() => {
-    if (!validCoords) return;
+    const id = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(id);
+  }, []);
 
-    const fetchAddress = async () => {
-      try {
-        const res = await fetch(
-          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`
-        );
-
-        const data = await res.json();
-
-        setAddress(
-          data?.display_name ||
-            `Lat ${lat.toFixed(3)}, Lng ${lng.toFixed(3)}`
-        );
-      } catch {
-        setAddress(`Lat ${lat.toFixed(3)}, Lng ${lng.toFixed(3)}`);
-      }
-    };
-
-    fetchAddress();
-  }, [lat, lng, validCoords]);
-
-  // =========================
-  // CART TOTAL
-  // =========================
-  const subtotal = useMemo(() => {
-    return cart.reduce(
-      (sum, item) => sum + item.price * (item.quantity || 1),
-      0
+  // IntersectionObserver animations
+  useEffect(() => {
+    if (loading) return;
+    const page = pageRef.current;
+    if (!page) return;
+    const targets = page.querySelectorAll(".rst__animate");
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) { targets.forEach((el) => el.classList.add("rst__visible")); return; }
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("rst__visible"); observer.unobserve(e.target); }
+      }),
+      { threshold: 0.08 }
     );
-  }, [cart]);
+    targets.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, [loading]);
 
-  // =========================
-  // DISTANCE CALC
-  // =========================
-  const getDistance = (lat1, lng1, lat2, lng2) => {
-    const toRad = (v) => (v * Math.PI) / 180;
-    const R = 6371;
+  // ── Cart guard — one restaurant at a time ────────────────────────────────
+  const showNote = useCallback((msg) => {
+    setNote(msg);
+    setTimeout(() => setNote(null), 4000);
+  }, []);
 
-    const dLat = toRad(lat2 - lat1);
-    const dLng = toRad(lng2 - lng1);
+  const handleAddItem = useCallback((restaurant, dish, price) => {
+    if (cart.length > 0) {
+      const current = cart[0].restaurant;
+      if (current !== restaurant.name) {
+        showNote(`Clear your cart from "${current}" before ordering from "${restaurant.name}".`);
+        return;
+      }
+    }
+    const key = `${restaurant.id}-${dish}`;
+    addItem({ restaurant: restaurant.name, dish, price, quantity: 1 });
+    showNote(`${dish} added to cart ✓`);
+    setAddedMap((prev) => ({ ...prev, [key]: true }));
+    setTimeout(() => setAddedMap((prev) => { const n = { ...prev }; delete n[key]; return n; }), 1500);
+  }, [cart, addItem, showNote]);
 
-    const a =
-      Math.sin(dLat / 2) ** 2 +
-      Math.cos(toRad(lat1)) *
-        Math.cos(toRad(lat2)) *
-        Math.sin(dLng / 2) ** 2;
+  // ── Filter controls ──────────────────────────────────────────────────────
+  const setCategory = useCallback((cat) => {
+    const next = new URLSearchParams(searchParams);
+    if (cat === "All") next.delete("category");
+    else next.set("category", cat);
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
-    return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-  };
+  const setSearch = useCallback((val) => {
+    const next = new URLSearchParams(searchParams);
+    if (val.trim()) next.set("search", val.trim());
+    else next.delete("search");
+    setSearchParams(next, { replace: true });
+  }, [searchParams, setSearchParams]);
 
-  // =========================
-  // PREPARE RESTAURANTS (CLEAN DATA LAYER)
-  // =========================
-  const enrichedRestaurants = useMemo(() => {
-    let list = [...restaurants];
+  // ── Filtered + sorted list ───────────────────────────────────────────────
+  const displayed = useMemo(() => {
+    let list = restaurants.map((r) => ({ ...r, openNow: isOpen(r) }));
 
-    if (validCoords) {
-      list = list.map((r) => {
-        const distance = getDistance(lat, lng, r.lat, r.lng);
-        const eta = Math.max(12, Math.round(distance * 7));
+    // Search filter
+    if (urlSearch) {
+      const q = urlSearch.toLowerCase();
+      list = list.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          r.description.toLowerCase().includes(q) ||
+          r.category.toLowerCase().includes(q) ||
+          r.menu.some((m) => m.name.toLowerCase().includes(q))
+      );
+    }
 
-        return {
-          ...r,
-          distance: distance.toFixed(1),
-          eta,
-          isOpen: getOpenStatus(r),
-          isTopRated: r.rating >= 4.5,
-        };
-      });
+    // Category filter
+    if (urlCategory && urlCategory !== "All") {
+      list = list.filter((r) => r.category === urlCategory);
+    }
 
-      // SMART SORT (Uber-style ranking)
-      list.sort((a, b) => {
-        const scoreA = a.eta * 0.6 + (5 - a.rating) * 10;
-        const scoreB = b.eta * 0.6 + (5 - b.rating) * 10;
-        return scoreA - scoreB;
-      });
+    // Sort
+    switch (activeSort) {
+      case "rating":
+        list.sort((a, b) => b.rating - a.rating);
+        break;
+      case "fastest":
+        list.sort((a, b) => a.baseDeliveryTime - b.baseDeliveryTime);
+        break;
+      case "open":
+        list.sort((a, b) => (b.openNow ? 1 : 0) - (a.openNow ? 1 : 0));
+        break;
+      default: // popular — keep original order (by reviews/default)
+        break;
     }
 
     return list;
-  }, [lat, lng, validCoords]);
+  }, [urlSearch, urlCategory, activeSort]);
+
+  const cartCount = cart.reduce((s, i) => s + (i.quantity ?? 1), 0);
+  const cartTotal = cart.reduce((s, i) => s + i.price * (i.quantity ?? 1), 0);
 
   return (
-    <section className="py-5 bg-warning" id="restaurants-page">
-      <div className="container">
+    <main
+      className="rst"
+      id="restaurants-page"
+      aria-labelledby="rst-heading"
+      ref={pageRef}
+    >
+      {/* ── Page header ── */}
+      <div className="rst__header rst__animate">
+        <div className="rst__header-inner">
+          <span className="rst__eyebrow">
+            <i className="fas fa-store" aria-hidden="true"></i>
+            {displayed.length} restaurant{displayed.length !== 1 ? "s" : ""} in Uyo
+          </span>
+          <h1 className="rst__title" id="rst-heading">
+            All Restaurants
+          </h1>
+          <p className="rst__subtitle">
+            Browse, filter, and order from Uyo's best local spots.
+          </p>
+        </div>
+      </div>
 
-        {/* LOCATION */}
-        {validCoords && (
-          <div className="location-banner">
-            📍 {address || "Detecting location..."} ({orderType})
+      <div className="rst__inner">
+
+        {/* ── Search + controls ── */}
+        <div className="rst__controls rst__animate" style={{ "--delay": "0.05s" }}>
+
+          {/* Search bar */}
+          <div className="rst__search" role="search" aria-label="Search restaurants">
+            <i className="fas fa-search rst__search-icon" aria-hidden="true"></i>
+            <input
+              type="search"
+              className="rst__search-input"
+              placeholder="Search restaurants or dishes…"
+              value={urlSearch}
+              onChange={(e) => setSearch(e.target.value)}
+              aria-label="Search restaurants and dishes"
+              autoComplete="off"
+            />
+            {urlSearch && (
+              <button
+                className="rst__search-clear"
+                onClick={() => setSearch("")}
+                aria-label="Clear search"
+                type="button"
+              >
+                <i className="fas fa-times" aria-hidden="true"></i>
+              </button>
+            )}
           </div>
-        )}
 
-        {/* TITLE */}
-        <motion.h2
-          className="text-center fw-bold mb-4"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-        >
-          🍽 Restaurants Near You
-        </motion.h2>
-
-        <Categories />
-
-        {/* GRID */}
-        <div className="row">
-          {enrichedRestaurants.map((restaurant, idx) => (
-            <motion.div
-              key={restaurant.name}
-              className="col-md-3 col-sm-6 mb-4 d-flex"
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.03 }}
+          {/* Sort */}
+          <div className="rst__sort-wrap">
+            <label htmlFor="rst-sort" className="rst__sort-label">
+              <i className="fas fa-sort-amount-down" aria-hidden="true"></i>
+              Sort:
+            </label>
+            <select
+              id="rst-sort"
+              className="rst__sort"
+              value={activeSort}
+              onChange={(e) => setSort(e.target.value)}
+              aria-label="Sort restaurants"
             >
-              <div className="restaurant-card">
+              {SORT_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+          </div>
+        </div>
 
-                {/* TAG */}
-                <div className="restaurant-tag">
-                  {restaurant.tagline}
-                </div>
-
-                {/* IMAGE */}
-                <div className="restaurant-img-wrap">
-                  <img
-                    src={restaurant.image}
-                    alt={restaurant.name}
-                    className="restaurant-banner"
-                  />
-                </div>
-
-                {/* BODY */}
-                <div className="card-body">
-
-                  {/* NAME + STATUS */}
-                  <div className="d-flex justify-content-between align-items-start">
-
-                    <div>
-                      <div className={`fw-bold ${restaurant.isTopRated ? "top-rated" : ""}`}>
-                        {restaurant.name}
-                      </div>
-
-                      <small>⭐ {restaurant.rating}</small>
-                    </div>
-
-                    <span className={`status-badge ${restaurant.isOpen ? "open" : "closed"}`}>
-                      {restaurant.isOpen ? "Open now" : "Closed"}
-                    </span>
-
-                  </div>
-
-                  {/* META */}
-                  <div className="meta-row">
-                    <span className="meta-pill">
-                     <i className="fas fa-clock me-1"></i>
-                      {restaurant.eta} min
-                   </span>
-
-                  <span className="meta-pill">
-                    <i className="fas fa-location-dot me-1"></i>
-                    {restaurant.distance} km
-                  </span>
-                 </div>
-
-                  {/* DESCRIPTION */}
-                  <p>{restaurant.description}</p>
-
-                  {/* MENU */}
-                  <div className="menu-list">
-                    {restaurant.menu.slice(0, 2).map((item, i) => (
-                      <div key={i} className="popular-dish-item">
-
-                        <div>{item.name}</div>
-
-                        <button
-                          onClick={() =>
-                            addItem({
-                              restaurant: restaurant.name,
-                              dish: item.name,
-                              price: item.price,
-                              quantity: 1,
-                            })
-                          }
-                          className="dish-add-btn"
-                        >
-                          +
-                        </button>
-
-                      </div>
-                    ))}
-                  </div>
-
-                </div>
-
-                {/* FOOTER */}
-                <div className="card-footer">
-
-                  <Link
-                    to={`/restaurant/${idx}`}
-                    className="restaurant-view-btn"
-                  >
-                    View
-                  </Link>
-
-                  <button
-                    onClick={() =>
-                      addItem({
-                        restaurant: restaurant.name,
-                        dish: restaurant.menu[0].name,
-                        price: restaurant.menu[0].price,
-                        quantity: 1,
-                      })
-                    }
-                    className="restaurant-order-btn"
-                  >
-                    Quick +
-                  </button>
-
-                </div>
-
-              </div>
-            </motion.div>
+        {/* ── Category filters ── */}
+        <div
+          className="rst__filters rst__animate"
+          style={{ "--delay": "0.1s" }}
+          role="group"
+          aria-label="Filter by category"
+        >
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`rst__filter-btn${urlCategory === cat || (cat === "All" && !urlCategory) ? " active" : ""}`}
+              onClick={() => setCategory(cat)}
+              aria-pressed={urlCategory === cat || (cat === "All" && !urlCategory)}
+              type="button"
+            >
+              {cat}
+            </button>
           ))}
         </div>
 
-        {/* CART */}
-        {cart.length > 0 && (
-          <div className="floating-cart">
-            <span className="cart-icon">🛒</span>
-            <span className="cart-text">
-              {cart.length} {cart.length === 1 ? "item" : "items"} | ₦{subtotal}
-            </span>
-            <Link to="/cart" className="btn btn-light btn-sm ms-2">
-              View Cart
-            </Link>
+        {/* Active search banner */}
+        {urlSearch && !loading && (
+          <div className="rst__search-banner" aria-live="polite">
+            <i className="fas fa-search" aria-hidden="true"></i>
+            {displayed.length > 0
+              ? <>Results for "<strong>{urlSearch}</strong>" — {displayed.length} found</>
+              : <>No results for "<strong>{urlSearch}</strong>"</>
+            }
+            <button
+              className="rst__search-banner-clear"
+              onClick={() => setSearch("")}
+              type="button"
+            >
+              Clear
+            </button>
           </div>
         )}
 
+        {/* ── Grid ── */}
+        <div
+          className="rst__grid"
+          role="list"
+          aria-label="Restaurants"
+          aria-busy={loading}
+        >
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div role="listitem" key={i}><SkeletonCard /></div>
+              ))
+            : displayed.length === 0
+              ? (
+                <div className="rst__empty" role="status">
+                  <i className="fas fa-store" aria-hidden="true"></i>
+                  <h3>No restaurants found</h3>
+                  <p>Try adjusting your search or filters.</p>
+                  <button
+                    className="rst__empty-reset"
+                    onClick={() => { setSearch(""); setCategory("All"); }}
+                    type="button"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              )
+              : displayed.map((restaurant, idx) => {
+                  const openNow = restaurant.openNow;
+                  return (
+                    <article
+                      key={restaurant.id}
+                      className={`rst__card rst__animate${!openNow ? " rst__card--closed" : ""}`}
+                      role="listitem"
+                      style={{ "--delay": `${idx * 0.07}s` }}
+                      aria-label={`${restaurant.name} — ${restaurant.category}. Rated ${restaurant.rating}. ${openNow ? "Open now" : "Currently closed"}`}
+                    >
+                      {/* Image */}
+                      <Link
+                        to={`/restaurant/${restaurant.id}`}
+                        className="rst__img-link"
+                        tabIndex={-1}
+                        aria-hidden="true"
+                      >
+                        <div className="rst__img-wrap">
+                          <img
+                            src={restaurant.image}
+                            alt={`${restaurant.name} — ${restaurant.category} restaurant in Uyo`}
+                            className="rst__img"
+                            width="400"
+                            height="220"
+                            loading={idx < 2 ? "eager" : "lazy"}
+                          />
+                          {/* Open/closed badge */}
+                          <span className={`rst__status${openNow ? " open" : " closed"}`} aria-hidden="true">
+                            {openNow ? "● Open" : "● Closed"}
+                          </span>
+                          {/* Pickup badge */}
+                          {restaurant.supportsPickup && (
+                            <span className="rst__pickup" aria-hidden="true">
+                              <i className="fas fa-walking"></i> Pickup
+                            </span>
+                          )}
+                          {/* Category tag */}
+                          <span className="rst__cat-tag" aria-hidden="true">
+                            {restaurant.category}
+                          </span>
+                        </div>
+                      </Link>
+
+                      {/* Body */}
+                      <div className="rst__body">
+                        <div className="rst__meta">
+                          <div>
+                            <h2 className="rst__name">{restaurant.name}</h2>
+                            <div className="rst__rating" aria-label={`Rated ${restaurant.rating} out of 5`}>
+                              <StarRating rating={restaurant.rating} />
+                              <span className="rst__rating-val">{restaurant.rating}</span>
+                            </div>
+                          </div>
+                          <div className="rst__info">
+                            <span className="rst__info-item">
+                              <i className="fas fa-clock" aria-hidden="true"></i>
+                              {restaurant.baseDeliveryTime} min
+                            </span>
+                          </div>
+                        </div>
+
+                        <p className="rst__desc">{restaurant.description}</p>
+
+                        {/* Hours */}
+                        <p className="rst__hours">
+                          <i className="fas fa-door-open" aria-hidden="true"></i>
+                          {restaurant.openingTime} – {restaurant.closingTime}
+                        </p>
+
+                        {/* Menu preview — top 2 dishes */}
+                        <div className="rst__menu" aria-label={`Menu preview for ${restaurant.name}`}>
+                          {restaurant.menu.slice(0, 2).map((item) => {
+                            const key = `${restaurant.id}-${item.name}`;
+                            const added = !!addedMap[key];
+                            return (
+                              <div key={item.id} className="rst__dish">
+                                <div className="rst__dish-info">
+                                  <span className="rst__dish-name">{item.name}</span>
+                                  <span className="rst__dish-price">₦{item.price.toLocaleString()}</span>
+                                </div>
+                                <button
+                                  className={`rst__dish-add${added ? " added" : ""}${!openNow ? " disabled" : ""}`}
+                                  onClick={() => openNow && handleAddItem(restaurant, item.name, item.price)}
+                                  disabled={!openNow}
+                                  aria-label={openNow
+                                    ? `Add ${item.name} from ${restaurant.name} to cart`
+                                    : `${restaurant.name} is closed`
+                                  }
+                                  type="button"
+                                >
+                                  {added
+                                    ? <i className="fas fa-check" aria-hidden="true"></i>
+                                    : <i className="fas fa-plus" aria-hidden="true"></i>
+                                  }
+                                </button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Card footer */}
+                      <div className="rst__footer">
+                        <Link
+                          to={`/restaurant/${restaurant.id}`}
+                          className="rst__view-btn"
+                          aria-label={`View full menu for ${restaurant.name}`}
+                        >
+                          <i className="fas fa-utensils" aria-hidden="true"></i>
+                          View Menu
+                        </Link>
+                        <button
+                          className={`rst__quick-btn${!openNow ? " rst__quick-btn--closed" : ""}`}
+                          onClick={() =>
+                            openNow &&
+                            handleAddItem(restaurant, restaurant.menu[0].name, restaurant.menu[0].price)
+                          }
+                          disabled={!openNow}
+                          aria-label={openNow
+                            ? `Quick add ${restaurant.menu[0].name} from ${restaurant.name}`
+                            : `${restaurant.name} is currently closed`
+                          }
+                          type="button"
+                        >
+                          {openNow
+                            ? <><i className="fas fa-bolt" aria-hidden="true"></i> Quick Add</>
+                            : <><i className="fas fa-clock" aria-hidden="true"></i> Closed</>
+                          }
+                        </button>
+                      </div>
+                    </article>
+                  );
+                })}
+        </div>
+
       </div>
-    </section>
+
+      {/* ── Notification toast ── */}
+      {notification && (
+        <div
+          className={`rst__toast${notification.includes("Clear") ? " rst__toast--warn" : ""}`}
+          role="status"
+          aria-live="polite"
+        >
+          <i className={`fas ${notification.includes("Clear") ? "fa-exclamation-circle" : "fa-check-circle"}`} aria-hidden="true"></i>
+          {notification}
+        </div>
+      )}
+    </main>
   );
 }

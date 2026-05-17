@@ -1,0 +1,670 @@
+/* =============================
+   RESTAURANT DETAIL — UYO FOOD
+   Palette: deep green + red accent.
+   Tokens from index.css.
+   All selectors scoped to .rd__*
+============================= */
+
+/* ── Page wrapper ── */
+.rd {
+  min-height: 100vh;
+  background: #f9fdf9;
+  padding-bottom: 100px; /* clears sticky cart bar */
+}
+
+/* ── Animations ── */
+.rd__animate {
+  opacity: 0;
+  transform: translateY(20px);
+  transition:
+    opacity 0.5s ease var(--delay, 0s),
+    transform 0.5s ease var(--delay, 0s);
+}
+.rd__animate.rd__visible { opacity: 1; transform: translateY(0); }
+
+/* ── Hero banner ── */
+.rd__hero {
+  position: relative;
+  height: 420px;
+  overflow: hidden;
+}
+
+.rd__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.rd__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.25) 0%,
+    rgba(0,0,0,0.65) 100%
+  );
+}
+
+.rd__hero-content {
+  position: absolute;
+  bottom: 2rem;
+  left: 2rem;
+  right: 2rem;
+  z-index: 2;
+  color: #fff;
+}
+
+.rd__hero-cat {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 3px 12px;
+  border-radius: 99px;
+  margin-bottom: 0.6rem;
+  backdrop-filter: blur(6px);
+}
+
+.rd__hero-name {
+  font-size: clamp(1.8rem, 5vw, 3rem);
+  font-weight: 900;
+  color: #fff; /* FIX: white not red — better contrast on dark overlay */
+  margin: 0 0 0.4rem;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  letter-spacing: -0.5px;
+}
+
+.rd__hero-tagline {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.82);
+  margin: 0 0 0.8rem;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.rd__hero-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.rd__hero-dot { opacity: 0.4; }
+
+.rd__stars     { color: #f5a623; font-size: 0.78rem; }
+.rd__rating-val,
+.rd__hero-rating-val { font-weight: 700; margin-left: 4px; color: #fff; }
+
+.rd__hero-status.open   { color: #7dd87f; font-weight: 700; }
+.rd__hero-status.closed { color: #ffaaaa; font-weight: 700; }
+
+/* Back button */
+.rd__hero-back {
+  position: absolute;
+  top: 1.2rem;
+  left: 1.2rem;
+  z-index: 10;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+.rd__hero-back:hover { background: rgba(0,0,0,0.65); color: #fff; }
+
+/* ── Info bar ── */
+.rd__infobar {
+  background: #fff;
+  border-bottom: 1px solid #e8f5e8;
+  box-shadow: var(--shadow-sm);
+}
+
+.rd__infobar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.rd__infobar-address,
+.rd__infobar-hours {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  flex: 1;
+  min-width: 180px;
+}
+
+.rd__infobar-address i,
+.rd__infobar-hours i {
+  color: var(--uyo-green);
+  margin-top: 2px;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.rd__infobar-label {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+.rd__infobar-val {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* WhatsApp direct order button */
+.rd__whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #25d366;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.55rem 1.2rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: var(--transition);
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(37,211,102,0.28);
+  flex-shrink: 0;
+}
+.rd__whatsapp-btn:hover {
+  background: #1da851;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Change Outlet button */
+.rd__change-outlet-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: #fff;
+  color: var(--uyo-green);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.55rem 1.2rem;
+  border-radius: 50px;
+  border: 2px solid var(--uyo-green);
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.rd__change-outlet-btn:hover {
+  background: var(--uyo-green);
+  color: #fff;
+  transform: translateY(-1px);
+}
+.rd__change-outlet-btn:focus-visible {
+  outline: 3px solid var(--uyo-green);
+  outline-offset: 3px;
+}
+
+/* Actions group */
+.rd__infobar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+/* ── Inner container ── */
+.rd__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* ── Section header ── */
+.rd__section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e8f5e8;
+}
+
+.rd__section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--uyo-green);
+  margin: 0;
+}
+
+.rd__section-title i { color: var(--uyo-red); font-size: 1rem; }
+
+.rd__section-count {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #aaa;
+  background: #f5f5f5;
+  padding: 3px 10px;
+  border-radius: 99px;
+}
+
+/* ── Menu grid ── */
+.rd__menu-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ── Menu card ── */
+.rd__menu-card {
+  background: #fff;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid #e8f5e8;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+  position: relative;
+}
+
+.rd__menu-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--uyo-green);
+}
+
+/* Green top bar */
+.rd__menu-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--uyo-green);
+  transform: scaleX(0);
+  transition: transform 0.25s ease;
+  z-index: 2;
+}
+.rd__menu-card:hover::before { transform: scaleX(1); }
+
+/* ── Menu image ── */
+.rd__menu-img-wrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.rd__menu-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.rd__menu-card:hover .rd__menu-img { transform: scale(1.06); }
+
+/* In-cart badge */
+.rd__in-cart {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: var(--uyo-green);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 99px;
+  z-index: 3;
+  backdrop-filter: blur(4px);
+}
+
+/* ── Menu card body ── */
+.rd__menu-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.rd__menu-name {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--uyo-green);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.rd__menu-price {
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: var(--uyo-red);
+  margin: 0;
+}
+
+/* ── Quantity + add row ── */
+.rd__menu-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+/* Quantity control */
+.rd__qty {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  background: #f0f9f0;
+  border: 1.5px solid #c8e6c8;
+  border-radius: 99px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.rd__qty-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--uyo-green);
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+.rd__qty-btn:hover:not(:disabled) { background: #d0edda; }
+.rd__qty-btn:disabled { color: #ccc; cursor: not-allowed; }
+
+.rd__qty-val {
+  min-width: 26px;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--uyo-green);
+}
+
+/* Add to cart button */
+.rd__add-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 99px;
+  border: none;
+  background: var(--uyo-red);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(220,53,69,0.2);
+}
+.rd__add-btn:hover:not(:disabled) {
+  background: #c93512;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(220,53,69,0.32);
+}
+.rd__add-btn.added {
+  background: var(--uyo-green);
+  box-shadow: 0 3px 10px rgba(0,100,0,0.2);
+}
+.rd__add-btn.closed {
+  background: #e0e0e0;
+  color: #aaa;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.rd__add-btn:focus-visible { outline: 3px solid var(--uyo-red); outline-offset: 2px; }
+
+/* ── Reviews ── */
+.rd__reviews-section { }
+
+.rd__reviews-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.rd__review-card {
+  background: #fff;
+  border: 1.5px solid #e8f5e8;
+  border-radius: var(--radius-md);
+  padding: 1.1rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+.rd__review-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+
+.rd__review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rd__review-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--uyo-green);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rd__review-author {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.rd__review-date {
+  display: block;
+  font-size: 0.72rem;
+  color: #aaa;
+}
+
+.rd__review-stars {
+  margin-left: auto;
+  color: #f5a623;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.rd__review-text {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.55;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ── Sticky cart bar ── */
+.rd__cart-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 8000;
+  background: var(--uyo-green);
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+  animation: cartBarIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+@keyframes cartBarIn {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.rd__cart-bar-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.85rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.rd__cart-bar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.9);
+}
+.rd__cart-bar-info i { font-size: 1rem; }
+
+.rd__cart-bar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  color: var(--uyo-green);
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: var(--transition);
+}
+.rd__cart-bar-btn:hover { background: #f0f9f0; color: var(--uyo-green); }
+
+/* ── Toast notification ── */
+.rd__toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--uyo-green);
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  box-shadow: var(--shadow-lg);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: toastIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  white-space: nowrap;
+  max-width: calc(100vw - 3rem);
+}
+.rd__toast--warn { background: var(--uyo-red); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* ── 404 not found ── */
+.rd__not-found {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9fdf9;
+}
+
+.rd__not-found-inner {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 2rem;
+}
+
+.rd__not-found-inner i  { font-size: 3.5rem; color: #ddd; }
+.rd__not-found-inner h1 { font-size: 1.5rem; color: #555; margin: 0; }
+.rd__not-found-inner p  { color: #aaa; margin: 0; }
+
+.rd__back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--uyo-green);
+  color: #fff;
+  padding: 0.7rem 1.8rem;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  transition: var(--transition);
+}
+.rd__back-btn:hover { background: #004d00; color: #fff; }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .rd__animate    { transition: none; opacity: 1; transform: none; }
+  .rd__menu-card:hover { transform: none; }
+  .rd__menu-img   { transition: none; }
+  .rd__cart-bar   { animation: none; }
+  .rd__toast      { animation: none; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .rd__hero         { height: 300px; }
+  .rd__hero-content { bottom: 1.2rem; left: 1rem; right: 1rem; }
+  .rd__hero-name    { font-size: 1.8rem; }
+  .rd__infobar-inner { gap: 1rem; padding: 1rem; }
+  .rd__whatsapp-btn  { width: 100%; justify-content: center; }
+  .rd__inner         { padding: 1.5rem 1rem; }
+  .rd__menu-grid     { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .rd__reviews-grid  { grid-template-columns: 1fr; }
+  .rd__cart-bar-inner { padding: 0.75rem 1rem; }
+}
+
+@media (max-width: 480px) {
+  .rd__hero            { height: 240px; }
+  .rd__menu-grid       { grid-template-columns: 1fr; }
+  .rd__menu-img-wrap   { height: 150px; }
+  .rd__menu-actions    { flex-direction: column; }
+  .rd__add-btn         { width: 100%; }
+}

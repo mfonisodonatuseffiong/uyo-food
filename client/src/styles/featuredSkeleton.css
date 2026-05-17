@@ -1,0 +1,106 @@
+/* =============================
+   FEATURED SKELETON & EMPTY STATE
+   Styles for loading shimmer cards
+   and the empty filter state.
+  === */
+
+/* ── Skeleton card ── */
+.feat__skeleton {
+  pointer-events: none;
+  border-color: #eee;
+}
+
+.feat__skeleton-img {
+  height: 195px;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e8ede8 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.feat__skeleton-body {
+  padding: 1.1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.feat__skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    #f0f0f0 25%,
+    #e8ede8 50%,
+    #f0f0f0 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+.feat__skeleton-line--title { width: 70%; height: 16px; }
+.feat__skeleton-line--short { width: 40%; }
+.feat__skeleton-line--long  { width: 90%; }
+.feat__skeleton-line--btn   {
+  width: 100%;
+  height: 38px;
+  border-radius: var(--radius-md);
+  margin-top: 6px;
+}
+
+@keyframes shimmer {
+  0%   { background-position:  200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ── Empty state ── */
+.feat__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 1rem;
+  color: #aaa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.feat__empty i {
+  font-size: 2.5rem;
+  color: #ddd;
+}
+
+.feat__empty p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.feat__empty-reset {
+  background: var(--uyo-green);
+  color: #fff;
+  border: none;
+  border-radius: 99px;
+  padding: 0.6rem 1.5rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: var(--transition);
+}
+
+.feat__empty-reset:hover {
+  background: #004d00;
+}
+
+/* ── Reduced motion — skeleton ── */
+@media (prefers-reduced-motion: reduce) {
+  .feat__skeleton-img,
+  .feat__skeleton-line {
+    animation: none;
+    background: #efefef;
+  }
+}

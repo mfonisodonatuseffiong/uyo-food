@@ -1,0 +1,199 @@
+/* =============================
+   TRACKING PAGE (PREMIUM DANGER STYLE)
+============================= */
+
+#tracking-page {
+  min-height: 100vh;
+  padding: 6rem 1rem 3rem;
+
+  /*Background*/
+  background: rgba(227, 196, 113, 0.85);
+  background-attachment: fixed;
+
+  position: relative;
+  z-index: 0; /* ensure overlay works */
+}
+
+/* background pattern overlay */
+#tracking-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23dc3545' fill-opacity='0.05'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+  z-index: -1; /* sits behind content */
+}
+
+#tracking-page .container {
+  position: relative;
+  z-index: 1;
+}
+
+/* =============================
+   PAGE TITLE
+============================= */
+#tracking-page h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--uyo-red);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* =============================
+   PROGRESS BAR
+============================= */
+.progress {
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: #f1f1f1;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-bar {
+  background: var(--uyo-red);
+  font-weight: 700;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: width 0.4s ease;
+}
+
+/* =============================
+   TIMELINE STEPS
+============================= */
+.list-group {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.list-group-item {
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-bottom: 1px solid var(--border);
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item.fw-bold {
+  background: #fff;
+}
+
+/* =============================
+   ALERT MESSAGE
+============================= */
+.alert {
+  border-radius: 30px;
+  font-size: 0.9rem;
+  padding: 1rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  background: #fff;
+}
+
+.alert strong {
+  color: var(--uyo-red);
+}
+
+/* =============================
+   CANCEL ORDER BUTTON
+============================= */
+.premium-btn {
+  border: 2px solid var(--uyo-red);
+  color: var(--uyo-red);
+  background: #fff;
+  transition: var(--transition);
+}
+
+.premium-btn:hover {
+  background: var(--uyo-red);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* =============================
+   CANCEL MODAL
+============================= */
+.modal-content {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.modal-header {
+  background: var(--uyo-red);
+  color: #fff;
+}
+
+.modal-title {
+  font-weight: 800;
+}
+
+.modal-footer .btn {
+  min-width: 140px;
+  font-weight: 700;
+}
+
+.modal-footer .btn-danger {
+  background: var(--uyo-red);
+  border: none;
+}
+
+.modal-footer .btn-danger:hover {
+  background: #b02a37;
+}
+
+.modal-footer .btn-secondary {
+  background: #f1f1f1;
+  color: #333;
+  border: none;
+}
+
+.modal-footer .btn-secondary:hover {
+  background: #e2e2e2;
+}
+
+/* =============================
+   MAP CONTAINER
+============================= */
+.ratio {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.ratio iframe {
+  border: none;
+}
+
+/* =============================
+   MOBILE
+============================= */
+@media (max-width: 768px) {
+  #tracking-page {
+    padding-top: 5rem;
+  }
+
+  #tracking-page h2 {
+    font-size: 1.6rem;
+  }
+
+  .progress {
+    height: 24px;
+  }
+
+  .list-group-item {
+    font-size: 0.85rem;
+  }
+
+  .alert {
+    font-size: 0.85rem;
+    padding: 0.8rem 1.2rem;
+  }
+}

@@ -1,0 +1,79 @@
+/* =============================
+   FLOATING CART (GLASS LIGHT STYLE)
+============================= */
+.floating-cart {
+  position: fixed;
+  right: 20px;
+  bottom: 200px;
+  z-index: 1200;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 18px;
+  border-radius: 999px;
+
+  /* ✅ Glass effect background */
+  background: rgba(255, 255, 255, 0.15); /* very light transparent white */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  color: var(--uyo-red); /* danger red text for contrast */
+  font-size: 0.9rem;
+  font-weight: 700;
+
+  border: 1px solid rgba(220, 53, 69, 0.25); /* subtle danger border */
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+
+  transition: var(--transition);
+  animation: cartSlideIn 0.6s ease forwards;
+}
+
+.floating-cart:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Icon */
+.floating-cart .cart-icon {
+  font-size: 1.3rem;
+  color: var(--uyo-red);
+}
+
+/* Text */
+.floating-cart .cart-text {
+  white-space: nowrap;
+  color: var(--text-dark);
+}
+
+/* Button inside cart */
+.floating-cart .btn {
+  border-radius: 20px;
+  font-weight: 600;
+  padding: 5px 12px;
+
+  background: rgba(220, 53, 69, 0.85); /* semi-transparent danger red */
+  color: #fff;
+  border: none;
+  transition: var(--transition);
+}
+
+.floating-cart .btn:hover {
+  background: rgb(176, 141, 144); /* solid danger red on hover */
+  transform: scale(1.05);
+}
+
+/* =============================
+   ANIMATIONS
+============================= */
+@keyframes cartSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

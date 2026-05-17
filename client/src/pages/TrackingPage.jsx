@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import "../styles/trackingpage.css"; // ✅ Import your custom CSS file
 
 export default function TrackingPage() {
   const steps = ["Order Placed", "Preparing", "Out for Delivery", "Delivered"];
@@ -43,15 +44,14 @@ export default function TrackingPage() {
     setShowModal(false);
   };
 
-  // ✅ Show cancel button only if within first 5 minutes (300 seconds)
   const elapsedTime = 15 * 60 - timeLeft;
   const cancellationWindow = elapsedTime <= 300;
 
   return (
-    <section className="py-5 bg-warning" id="tracking-page">
+    <section id="tracking-page"> {/* ✅ Removed bg-warning */}
       <div className="container">
         <motion.h2
-          className="fw-bold text-dark mb-4 text-center"
+          className="fw-bold mb-4 text-center"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -60,9 +60,9 @@ export default function TrackingPage() {
         </motion.h2>
 
         {/* Progress bar */}
-        <motion.div className="progress mb-4" style={{ height: "30px" }}>
+        <motion.div className="progress mb-4">
           <div
-            className="progress-bar bg-danger fw-bold"
+            className="progress-bar fw-bold"
             role="progressbar"
             style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
           >
@@ -86,16 +86,16 @@ export default function TrackingPage() {
         </ul>
 
         {/* Estimated delivery message */}
-        <motion.div className="alert alert-info mt-4 text-center rounded-pill shadow-sm">
+        <motion.div className="alert mt-4 text-center rounded-pill shadow-sm">
           🚚 Your order is <strong>{steps[currentStep]}</strong>... <br />
           ⏱ Estimated delivery in <span className="fw-bold text-danger">{formatTime(timeLeft)}</span>
         </motion.div>
 
-        {/* Cancel Order button + countdown message */}
+        {/* Cancel Order button */}
         {currentStep < 2 && cancellationWindow && (
           <div className="text-center mt-4">
             <motion.button
-              className="btn btn-outline-danger fw-bold rounded-pill premium-btn"
+              className="btn premium-btn fw-bold rounded-pill"
               onClick={() => setShowModal(true)}
               whileHover={{ scale: 1.05 }}
             >
@@ -110,7 +110,7 @@ export default function TrackingPage() {
           </div>
         )}
 
-        {/* Confirmation Modal */}
+        {/* Modal */}
         {showModal && (
           <div className="modal fade show d-block" tabIndex="-1">
             <div className="modal-dialog modal-dialog-centered">
@@ -150,7 +150,7 @@ export default function TrackingPage() {
           </div>
         )}
 
-        {/* Map placeholder */}
+        {/* Map */}
         <div className="mt-4">
           <h5 className="fw-bold text-dark mb-2">Live Map</h5>
           <div className="ratio ratio-16x9 rounded shadow-lg border border-danger">
